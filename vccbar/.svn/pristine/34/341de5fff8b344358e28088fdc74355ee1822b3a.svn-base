@@ -1,0 +1,23 @@
+class Category < ActiveRecord::Base
+  self.table_name = 'd_category'
+  self.primary_key = 'category_id'
+
+  def self.add(data)
+    category = self.new
+    category.category_name  = data[:category_name]
+    category.created_date   = Time.now
+    category.modified_date  = Time.now
+    category.created_by     = 1
+    category.modified_by    = 1
+    return category.save
+  end
+
+  def self.update_data(data, object)
+
+    data[:modified_date]  = Time.now
+    data[:modified_by]    = 1
+    return object.update_attributes(data)
+  end
+
+  #validates :category_name, presence: true
+end
