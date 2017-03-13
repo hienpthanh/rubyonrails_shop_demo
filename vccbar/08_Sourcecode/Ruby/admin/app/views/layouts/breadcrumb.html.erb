@@ -1,0 +1,25 @@
+<!-- start:BREADCRUMB -->
+<ol class="breadcrumb">
+  <li>
+    <i class="clip-grid-6"></i>
+    <a href="/">
+      Trang Chủ
+    </a>
+  </li>
+  <% if(!@breadcrumbs.nil?) %>
+    <% @breadcrumbs.each do | breadcrumb |%>
+      <% if(!breadcrumb[:active].nil? && breadcrumb[:active] == 1)%>
+        <li class="<%= !breadcrumb[:active].nil? ? 'active':'' %>">
+          <%= breadcrumb[:title] %>
+        </li>
+      <% else %>
+        <li class="">
+          <a href="<%= breadcrumb[:url] %>">
+            <%= breadcrumb[:title] %>
+          </a>                
+        </li>
+      <% end %>
+    <% end %>
+  <% end %>
+</ol>
+<!-- -->

@@ -1,61 +1,14 @@
 <% 
   product = data[:product]
+
+  type = ''
+  if(product.price != product.price_special)
+    type = 'sale'
+  elsif (product.is_hot == 1)
+    type = 'hot'
+  end 
 %>
-<div class="col-sm-6 col-md-4 wow fadeInUp animated" style="visibility: visible; animation-name: fadeInUp;">
-  <div class="products">  
-    <div class="product">   
-      <div class="product-image">
-        <div class="image">
-          <a href="/product/<%= to_alias(product.product_name)%>.<%= product.product_id %>.html"><img src="<%= product.product_image %>" alt="<%= product.product_name%>"></a>
-        </div><!-- /.image --> 
-        <% 
-          tag = ''
-          if(product.price != product.price_special)
-            tag = 'sale'
-          elsif (product.is_hot == 1)
-            tag = 'hot'
-          end 
-        %>
-        <% if(tag) %>
-          <div class="tag <%= tag %>">
-            <span><%= tag %></span>
-          </div>
-        <% end %>          
-      </div><!-- /.product-image -->
-      <div class="product-info text-left">
-        <h3 class="name"><a href="/product/<%= to_alias(product.product_name)%>.<%= product.product_id %>.html" title="<%= product.product_name%>"><%= product.product_name%></a></h3>
-        <div class="description"></div>
-        <div class="product-price">          
-          <% if(tag == "sale") %>
-            <span class="price">
-              <%= product.price_special %> VNĐ       
-            </span>            
-            <span class="price-before-discount"><s><%= product.price %></s> VNĐ</span>
-          <% else %>
-            <span class="price">
-              <%= product.price %> VNĐ       
-            </span>              
-          <% end %>          
-        </div><!-- /.product-price -->  
-
-      </div><!-- /.product-info -->
-      <div class="cart clearfix animate-effect">
-        <div class="action">
-          <ul class="list-unstyled">
-            <li class="add-cart-button btn-group">
-              <button class="btn btn-primary icon" data-toggle="dropdown" type="button">
-                <i class="fa fa-shopping-cart"></i>                         
-              </button>
-              <button class="btn btn-primary" type="button">Thêm Vào Giỏ</button>
-            </li>
-          </ul>
-        </div><!-- /.action -->
-      </div><!-- /.cart -->
-    </div><!-- /.product -->                  
-  </div><!-- /.products -->
-</div>
-
-<div class="category-product-inner wow fadeInUp" style="visibility: hidden; animation-name: none;">
+<div class="category-product-inner wow fadeInUp category-product-list-item" style="visibility: hidden; animation-name: none;">
   <div class="products">        
     <div class="product-list product">
       <div class="row product-list-row">
@@ -70,7 +23,7 @@
           <div class="product-info">
             <h3 class="name"><a href="/product/<%= to_alias(product.product_name)%>.<%= product.product_id %>.html" title="<%= product.product_name%>"><%= product.product_name%></a></h3>
             <div class="product-price"> 
-              <% if(tag == "sale") %>
+              <% if(type == "sale") %>
                 <span class="price">
                   <%= product.price_special %> VNĐ       
                 </span>            
@@ -79,7 +32,7 @@
                 <span class="price">
                   <%= product.price %> VNĐ       
                 </span>              
-              <% end %>  
+              <% end %> 
             </div><!-- /.product-price -->
             <div class="description m-t-10"><%= product.product_description %></div>
             <div class="cart clearfix animate-effect">
@@ -100,7 +53,11 @@
           </div><!-- /.product-info --> 
         </div><!-- /.col -->
       </div><!-- /.product-list-row -->
-      <div class="tag new"><span>new</span></div>        
+      <% if(type) %>
+        <div class="tag <%= type %>">
+          <span><%= type %></span>
+        </div>
+      <% end %>  
     </div><!-- /.product-list -->
   </div><!-- /.products -->
 </div>

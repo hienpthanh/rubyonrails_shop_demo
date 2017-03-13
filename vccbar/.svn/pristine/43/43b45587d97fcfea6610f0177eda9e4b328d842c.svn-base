@@ -1,0 +1,36 @@
+module ApplicationHelper
+
+  def header
+    render template: "layouts/header"
+  end
+  def footer
+    render template: "layouts/footer"
+  end
+  def sidebar
+    render template: "layouts/sidebar"
+  end
+  def pageheader
+    render template: "layouts/pageheader"
+  end
+  def error_messages_for
+    render template: "shared/error_messages"
+  end
+  def category_list
+    categories = Category.get_categories    
+    return self.category_show(0,categories).html_safe;
+  end
+
+  def category_show(parentid, categories, res = '', sep = '')
+    categories.each do | category |
+         if(category.parent_id == parentid)
+            re   = "<option value='#{category.category_id}'>#{sep} #{category.category_name}</a><br>"
+            res += category_show(category.category_id, categories, re, sep + '- - ')
+         end
+    end
+    return res
+  end
+
+  def breadcrumb
+    render template: "layouts/breadcrumb"
+  end
+end

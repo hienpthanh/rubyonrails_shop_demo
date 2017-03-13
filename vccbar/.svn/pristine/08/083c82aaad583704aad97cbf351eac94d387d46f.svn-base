@@ -1,0 +1,6 @@
+<option value="" ></option>
+<% @wards.each do | ward | %>
+  <option value="<%= ward.ward_id %>" class="district_<%= ward.district_id %>">
+    <%= ward.name %>
+  </option>
+<% end %>

@@ -6,6 +6,10 @@ Rails.application.routes.draw do
   get 'category/:name.:id.html' => :index
   end
 
+  controller :product do
+  get 'product/:name.:id.html' => :index
+  end
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

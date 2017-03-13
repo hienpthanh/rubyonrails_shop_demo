@@ -8,13 +8,13 @@
             <ul class="nav">
               <%- @categories.each do |category| %>
                 <li class="dropdown menu-item">
-                  <a href="/category/<%= to_alias(category.category_name)%>.<%= category.category_id %>.html"><i class="icon fa fa-desktop fa-fw"></i><%= category.category_name %></a>
+                  <a href="/category/<%= to_alias(category.category_name)%>.<%= category.category_id %>.html"><i class="icon fa fa-list" aria-hidden="true"></i><%= category.category_name %></a>
                 </li><!-- /.menu-item -->
               <% end %>
             </ul><!-- /.nav -->
           </nav><!-- /.megamenu-horizontal -->
         </div><!-- /.side-menu -->
         <!-- ================================== TOP NAVIGATION : END ================================== -->
-
-      </div><!-- /.sidemenu-holder -->
+        <%= slider_product()%>
+      </div><!-- /.sidebar -->
       <!-- ============================================== SIDEBAR : END ============================================== -->

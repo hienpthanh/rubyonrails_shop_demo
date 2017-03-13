@@ -7,10 +7,11 @@ class CategoryController < ApplicationController
 			@page = Integer(params[:page])
 		end	
 		
-		@limit  = Limit_Per_Page
+		@limit = Limit_Per_Page
 		offset = (@page - 1)*@limit
 
-		@category = Category.find(category_id)
-		@products = Product.get_products_by_category(category_id, @limit, offset)
+		@category 		= Category.find(category_id)
+		@products 		= Product.get_products_by_category(category_id, @limit, offset)
+		@total_product 	= Product.get_total_products_by_category(category_id)
 	end
 end

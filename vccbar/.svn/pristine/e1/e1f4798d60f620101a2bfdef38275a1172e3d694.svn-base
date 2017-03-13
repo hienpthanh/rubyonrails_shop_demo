@@ -1,0 +1,76 @@
+<div class="navbar-content">
+  <!-- start: SIDEBAR -->
+  <div class="main-navigation navbar-collapse collapse">
+    <!-- start: MAIN MENU TOGGLER BUTTON -->
+    <div class="navigation-toggler">
+      <i class="clip-chevron-left"></i>
+      <i class="clip-chevron-right"></i>
+    </div>
+    <!-- end: MAIN MENU TOGGLER BUTTON -->
+    <!-- start: MAIN NAVIGATION MENU -->
+    <ul class="main-navigation-menu">
+      <li class="btn-default">
+        <a><i class="clip-home-3"></i>
+          <strong class="title"> ỨNG DỤNG </strong>
+        </a>
+      </li>
+      <li>
+        <a href="/index/index"><i class="clip-cog-2"></i>
+          <span class="title"> Tồn kho </span></span>
+        </a>
+      </li>
+      <li>
+        <a href="/orders/new"><i class="clip-cog-2"></i>
+          <span class="title"> Đặt hàng</span>
+        </a>
+      </li>
+      <li>
+        <a href="/orders"><i class="clip-cog-2"></i>
+          <span class="title"> Đơn hàng</span>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:void(0)"><i class="clip-cog-2"></i>
+          <span class="title"> Nhập Kho</span>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:void(0)"><i class="clip-cog-2"></i>
+          <span class="title"> Doanh thu</span>
+        </a>
+      </li>
+    </ul>
+
+    <!-- ADMIN -->
+    <ul class="main-navigation-menu">
+      <li class="btn-default">
+        <a><i class="clip-home-3"></i>
+          <strong class="title"> ADMIN </strong>
+        </a>
+      </li>
+      <li>
+        <a href="/category"><i class="clip-cog-2"></i>
+          <span class="title"> Danh mục</span>
+        </a>
+      </li>
+      <li>
+        <a href="/products"><i class="clip-cog-2"></i>
+          <span class="title"> Sản phẩm</span>
+        </a>
+      </li>
+      <li>
+        <a href="/unit"><i class="clip-cog-2"></i>
+          <span class="title"> Đơn vị tính</span>
+        </a>
+      </li>
+      <li>
+        <a href="/supplier"><i class="clip-cog-2"></i>
+          <span class="title"> Nhà cung cấp</span>
+        </a>
+      </li>
+    </ul>
+
+    <!-- end: MAIN NAVIGATION MENU -->
+  </div>
+  <!-- end: SIDEBAR -->
+</div>

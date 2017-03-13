@@ -1,0 +1,120 @@
+<!-- start: PAGE CONTENT -->
+<div class="row">
+  <div class="col-md-12">
+    <!-- start: DYNAMIC TABLE PANEL -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <i class="icon-external-link-sign"></i>
+        Thêm Sản Phẩm
+      </div>
+      <div class="panel-body">
+        <%= form_for @product,  html: {:class => "form-horizontal form_product", multipart: true} do |f| %>
+          <% if @product.errors.any? %>
+            <div id="error_explanation">
+              <h2><%= pluralize(@product.errors.count, "error") %> prohibited this product from being saved:</h2>
+
+              <ul>
+              <% @product.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+              </ul>
+            </div>
+          <% end %>
+          <div class="alert alert-danger display_hidden" id="show_fail">
+              <button data-dismiss="alert" class="close">
+                ×
+              </button>
+              <!-- <i class="icon-remove-sign"></i> -->
+              <div class="error_show">
+              </div>
+            </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label"> Danh Mục: <label class="error_require">*</label> </label>
+            <div class="col-sm-9">
+              <%= f.collection_select :category_id, Category.where('del_flg = 0'), :category_id, :category_name,{:include_blank => ''},{class: "form-control category_name"} %>
+
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label"> Tên Sản Phẩm: <label class="error_require">*</label> </label>
+            <div class="col-sm-9">
+              <%= f.text_field :product_name, :class=>"form-control", :id =>"product_name" %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label"> Mã:  <label class="error_require">*</label> </label>
+            <div class="col-sm-9">
+              <%= f.text_field :product_code , :class=>"form-control", :id =>"product_code" %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label"> Mô Tả Sản Phẩm: </label>
+            <div class="col-sm-9">
+              <%= f.text_area :product_description , :class=>"form-control" %>
+            </div>
+          </div>
+          <!-- <div class="form-group">
+              <label class="col-sm-2 control-label"> Hình Ảnh </label>
+            <div class="col-sm-9">
+              <%= f.file_field :product_image %>
+            </div>
+          </div> -->
+          <div class="form-group">
+            <label class="col-sm-2 control-label"> Giá: </label>
+            <div class="col-sm-9">
+              <%= f.text_field :price , :class=>"form-control price" %>
+              <!-- <div id="error_price"></div> -->
+              <div id="error_price"></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label"> Giảm Giá: </label>
+            <div class="col-sm-9">
+              <%= f.text_field :price_special , :class=>"form-control price_special" %>
+              <div id="error_special"></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label"> Đơn Vị: <label class="error_require">*</label></label>
+            <div class="col-sm-9">
+              <%= f.collection_select :unit_id, Unit.where('del_flg = 0'), :unit_id, :unit_name , {:include_blank => ''},{class: "form-control unit_name"}  %>
+            </div>
+          </div>
+          <div class="form-group">
+              <label class="col-sm-2 control-label"> Sản Phẩm Hot: </label>
+            <div class="col-sm-9">
+              <%= f.check_box :is_hot %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label"> Sản Phẩm Slider: </label>
+            <div class="col-sm-9">
+              <%= f.check_box :is_slider %>
+            </div>
+          </div>
+          <div class="form-group">
+              <label class="col-sm-2 control-label">Trạng Thái: </label>
+            <div class="col-sm-9">
+              <%= f.check_box :is_active %>
+            </div>
+          </div>
+          <div class="actions">
+            <div class="form-group">
+              <div class="col-sm-2">
+              </div>
+              <div class="col-sm-9">
+                <!-- <%= f.submit(:class=>"btn btn-light-grey", :value=>'Lưu',:id =>"submit_product") %> -->
+                <%= link_to("#", :class=>"btn btn-light-grey",:id =>"submit_product") do %>
+                  Lưu
+                <% end %>
+              </div>
+          </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <!-- end: DYNAMIC TABLE PANEL -->
+  </div>
+</div>
+<!-- end: PAGE CONTENT-->

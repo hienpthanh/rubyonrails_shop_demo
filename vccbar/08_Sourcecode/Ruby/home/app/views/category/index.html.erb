@@ -12,9 +12,13 @@
 	<div class='container'>
 		<div class='row outer-bottom-sm'>
 			<div class='col-md-3 sidebar'>
-			<%= sidebar_home() %>
+			<%= sidebar_category() %>
 			</div>
-			<div class='col-md-9'>
+			<div class='col-md-9 main-content'>
+			<div id="category" class="hidden-xs">
+				<h1><%= @category.category_name %></h1>
+			</div>
+<!--
 				<div id="category" class="category-carousel hidden-xs">
 					<div class="item">	
 						<div class="image">
@@ -31,9 +35,12 @@
 								</div>
 								
 							</div><!-- /.caption -->
+<!--							
 						</div><!-- /.container-fluid -->
+<!--						
 					</div>
 				</div>
+-->
 				<div class="clearfix filters-container m-t-10">
 					<div class="row">
 						<div class="col col-sm-6 col-md-2">
@@ -46,6 +53,7 @@
 								</ul>
 							</div><!-- /.filter-tabs -->
 						</div><!-- /.col -->
+<!--
 						<div class="col col-sm-12 col-md-6">
 							<div class="col col-sm-3 col-md-6 no-padding">
 								<div class="lbl-cnt">
@@ -64,8 +72,11 @@
 											</ul>
 										</div>
 									</div><!-- /.fld -->
+<!--									
 								</div><!-- /.lbl-cnt -->
+<!--								
 							</div><!-- /.col -->
+<!--								
 							<div class="col col-sm-3 col-md-6 no-padding">
 								<div class="lbl-cnt">
 									<span class="lbl">Show</span>
@@ -89,20 +100,17 @@
 											</ul>
 										</div>
 									</div><!-- /.fld -->
+<!--
 								</div><!-- /.lbl-cnt -->
+<!--								
 							</div><!-- /.col -->
+<!--							
 						</div><!-- /.col -->
 						<div class="col col-sm-6 col-md-4 text-right">
-							<div class="pagination-container">
-								<ul class="list-inline list-unstyled">
-									<li class="prev"><a href="#"><i class="fa fa-angle-left"></i></a></li>
-									<li><a href="#">1</a></li>	
-									<li class="active"><a href="#">2</a></li>	
-									<li><a href="#">3</a></li>	
-									<li><a href="#">4</a></li>	
-									<li class="next"><a href="#"><i class="fa fa-angle-right"></i></a></li>
-								</ul><!-- /.list-inline -->
-							</div><!-- /.pagination-container -->		
+							<% if(@total_product > @limit) %>
+								<% config = {"total_row": @total_product, "page": @page} %>
+				      	<%= pagination(config)%>
+							<% end %>		
 						</div><!-- /.col -->
 					</div><!-- /.row -->
 				</div>
@@ -111,26 +119,34 @@
 						<div class="tab-pane active " id="grid-container">
 							<div class="category-product  inner-top-vs">
 								<div class="row">
-									<% @products.each do |product| %>
-										<% data = {"product": product}%>
-                    					<%= render partial: "category_product_item_grid", object: data, as: 'data' %>
+									<% if (@total_product > 0) %>
+										<% @products.each do |product| %>
+											<% data = {"product": product}%>
+	                    <%= render partial: "category_product_item_grid", object: data, as: 'data' %>
+										<% end %>
+									<% else %>
+										<p class="text-center">Chưa có sản phẩm</p>
 									<% end %>
 								</div>
 							</div>
 						</div>
-						<div class="tab-pane " id="list-container">
-							<% @products.each do |product| %>
-								<% data = {"product": product}%>
-            					<%= render partial: "category_product_item_grid", object: data, as: 'data' %>
+						<div class="tab-pane category-product" id="list-container">
+							<% if (@total_product > 0) %>
+								<% @products.each do |product| %>
+									<% data = {"product": product}%>
+	            		<%= render partial: "category_product_item_list", object: data, as: 'data' %>
+								<% end %>
+							<% else %>
+								<p class="text-center">Chưa có sản phẩm</p>
 							<% end %>
 						</div>
 					</div>
 					<div class="clearfix filters-container">						
 						<div class="text-right">
-							<%
-								config = {"total_row":50, "page": @page}								
-							%>
-					         <%= pagination(config)%>						    
+							<% if(@total_product > @limit) %>
+								<% config = {"total_row": @total_product, "page": @page} %>
+					      <%= pagination(config)%>
+							<% end %>						    
 						</div><!-- /.text-right -->						
 					</div>
 			</div><!-- /.col -->

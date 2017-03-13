@@ -1,0 +1,20 @@
+<!-- start: PAGE CONTENT -->
+<div class="row">
+  <div class="col-md-12">
+    <!-- start: DYNAMIC TABLE PANEL -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <i class="icon-external-link-sign"></i>
+        Cập nhập Phiếu Nhập Kho
+      </div>
+      <div class="panel-body">
+        <%= error_messages_for() %>
+        <%= form_tag("/warehouse/#{@import['import_id']}", method: "post", id: "warehouse") do %>
+            <% render "form" %>
+        <% end %>
+      </div>
+    </div>
+    <!-- end: DYNAMIC TABLE PANEL -->
+  </div>
+</div>
+<!-- end: PAGE CONTENT-->

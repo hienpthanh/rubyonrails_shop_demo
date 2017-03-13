@@ -1,0 +1,4 @@
+.breadcrumb{
+	border-bottom: none;
+	background: none;
+}

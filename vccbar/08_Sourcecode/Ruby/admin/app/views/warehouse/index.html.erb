@@ -1,0 +1,131 @@
+<link rel="stylesheet" href="/assets/plugins/datepicker/css/datepicker.css">
+<script src="/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<!-- start: PAGE CONTENT -->
+<p class="text-right">
+<%= link_to('/warehouse/new', :class=>"btn btn-primary btn-squared") do %>
+  <i class="icon-plus"></i>
+  Thêm  
+<% end %>
+</p>
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <i class="clip-search-2"></i>
+        Tìm Kiếm
+        <div class="panel-tools">
+          <a class="btn btn-xs btn-link panel-collapse collapses" href="#">
+          </a>
+        </div>
+      </div>
+      <div class="panel-body">
+        <form id="frmSearch" > 
+          <div class="col-sm-2">
+            <label>Mã Hóa Đơn</label>
+            <input type="text" class="form-control" name="code" value="<%= @params[:code].nil? ? '' : @params[:code] %>">
+          </div>
+          <div class="col-sm-4">
+            <label>Tiêu Đề</label>
+            <input type="text" class="form-control" name="title" value="<%= @params[:title].nil? ? '' : @params[:title] %>">
+          </div>
+          <div class="col-sm-3">
+            <label>Ngày Nhập Kho</label>
+            <div class="input-group">
+              <input type="text" id="date" data-date-format="dd-mm-yyyy" 
+              data-date-viewmode="years" class="form-control date-picker" name="date" 
+              value="<%= @params[:date].nil? ? '' : @params[:date] %>">
+              <span class="input-group-addon"> <i class="icon-calendar"></i> </span>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <label>&nbsp;</label><br>
+            <button class="btn btn-yellow btn-squared">
+                    <i class="clip-search"></i>
+                    Tìm 
+            </button>
+            <a href="/warehouse" class="btn btn-default btn-squared">
+                    <i class="clip-rotate"></i>
+                    Làm Lại 
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <!-- start: DYNAMIC TABLE PANEL -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <i class="icon-external-link-sign"></i>
+        Danh Sách Danh Mục
+        <div class="panel-tools">
+          <a class="btn btn-xs btn-link panel-collapse collapses" href="#">
+          </a>
+          <a class="btn btn-xs btn-link panel-expand" href="#">
+            <i class="icon-resize-full"></i>
+          </a>
+        </div>
+      </div>
+      <div class="panel-body">
+        <%= error_messages_for() %>
+        <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
+          <thead>
+          <tr>
+            <th width="5%">STT</th>
+            <th width="8%">Mã Hóa Đơn</th>
+            <th width="20%">Tiêu Đề</th>
+            <th width="10%">Ngày Nhập Kho</th>
+            <th width="10%">Tổng Tiền</th>
+            <th width="17%">Nhà Cung Cấp</th>
+            <th width="8%">Trạng Thái</th>
+            <th width="12%">Người Nhập</th>
+            <th width="10%">Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <%- @warehouse_imports.each_with_index do |import, i| %>
+            <tr>
+              <td class="center"><%= (i +1) %></td>
+              <td><%= import.code %></td>
+              <td><%= import.title %></td>
+              <td><%= import.date.nil? ? '' : import.date.strftime("%d-%m-%Y") %></td>
+              <td class="text-right"><%= number_with_delimiter(import.total_grand) %></td>
+              <td><%= import.supplier_name %></td>
+              <td class="center">
+                <% if(import.import_stock == 1 || import.import_stock == true) %>
+                    <a href="javascript:void(0);" title="Đã nhập kho">
+                      <i class="clip-checkmark-circle-2"> </i>
+                    </a>
+                <% end %>
+              </td>
+              <td><%= import.created_last_name + ' ' + import.created_first_name %></td>
+              <td>
+                <a class="btn btn-green btn-xs" href="/warehouse/show/<%= import.import_id %>">
+                  <i class="clip-eye"></i>
+                </a>
+                <% if(import.import_stock != 1 && import.import_stock != true) %>
+                  <a class="btn btn-primary btn-xs" href="/warehouse/<%= import.import_id %>">
+                    <i class="icon-edit"></i>
+                  </a>
+                <% end %>
+
+                <a data-confirm="Are you sure?" data-method="delete" class="btn btn-bricky btn-xs" href="/warehouse/<%= import.import_id %>">
+                  <i class="glyphicon glyphicon-remove-circle"></i>
+                </a>
+              </td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+          
+      </div>
+    </div>
+    <!-- end: DYNAMIC TABLE PANEL -->
+  </div>
+</div>
+<!-- end: PAGE CONTENT-->
+<script type="text/javascript">
+  $('.date-picker').datepicker({
+      autoclose: true
+  });  
+</script>

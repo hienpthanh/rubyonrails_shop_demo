@@ -1,0 +1,15 @@
+<!-- ================================== TOP NAVIGATION ================================== -->
+<div class="side-menu animate-dropdown outer-bottom-xs">
+    <div class="head"><i class="icon fa fa-align-justify fa-fw"></i> Categories</div>        
+    <nav class="yamm megamenu-horizontal" role="navigation">
+        <ul class="nav">
+          <% @categories.each do |category| %>
+          <li class="dropdown menu-item">
+            <a href="/category/<%= to_alias(category.category_name)%>.<%= category.category_id %>.html"><i class="icon fa fa-list"></i><%= category.category_name %></a>
+          </li><!-- /.menu-item -->
+          <% end %>        
+        </ul><!-- /.nav -->
+    </nav><!-- /.megamenu-horizontal -->
+</div><!-- /.side-menu -->
+<!-- ================================== TOP NAVIGATION : END ================================== -->             
+<%= slider_product()%>

@@ -1,0 +1,199 @@
+class WarehouseImport < ActiveRecord::Base
+  self.table_name   = 'd_warehouse_import'
+  self.primary_key  = 'import_id'
+
+  #validates :title,:supplier_id, presence: true
+  # after_rollback : return_false, on: self.add
+  after_rollback :return_false, on: [:create, :update]
+  def self.get_all(params = [], page = 1, limit = 30)
+
+    offset = (page-1)*limit
+    sql = <<-SQL 
+        SELECT 
+          wi.import_id, 
+          wi.title, 
+          wi.code,
+          wi.total_grand, 
+          wi.created_date, 
+          wi.modified_date,
+          s.supplier_name,
+          u1.first_name as created_first_name, 
+          u1.last_name as created_last_name
+        FROM
+          d_warehouse_import AS wi
+        INNER JOIN d_supplier s ON s.supplier_id = wi.supplier_id
+        INNER JOIN d_user u1 ON u1.user_id = wi.created_by
+        WHERE wi.del_flg = 0        
+        ORDER BY wi.import_id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    SQL
+    return self.find_by_sql(sql) 
+  end
+
+  def self.add(data)
+
+    wi                = self.new
+    wi.title          = data[:title]
+    wi.code           = data[:code]
+    wi.date           = data[:date]
+    wi.total_grand    = data[:total_grand]
+    wi.supplier_id    = data[:supplier_id]
+    wi.note           = data[:note]
+    wi.created_date   = Time.now
+    wi.modified_date  = Time.now
+    wi.created_by     = 1
+    wi.modified_by    = 1
+
+    ActiveRecord::Base.transaction do
+
+      #insert to d_warehouse_import
+      begin
+        wi.save
+      rescue ActiveRecord::StatementInvalid
+        return false
+      end
+      
+
+      #insert to d_warehouse_import_item
+      if(!data[:item].empty?)
+
+        items = data[:item].values 
+        items.each do | item|
+
+          wii                = WarehouseImportItem.new
+          wii.import_id      = wi.import_id
+          wii.product_id     = item[:product_id]
+          wii.price          = item[:price]
+          wii.quantity       = item[:quantity]
+          wii.total_grand    = Integer(item[:price]) * Integer(item[:quantity])
+          wii.note           = item[:note]
+          wii.created_date   = Time.now
+
+          begin
+            wii.save
+          rescue ActiveRecord::StatementInvalid
+            raise ActiveRecord::Rollback
+            return false
+          end
+          
+        end
+      end
+
+    end
+
+    return wi.import_id
+  end
+
+  def self.update(object, data)
+    object.title          = data[:title]
+    object.code           = data[:code]
+    object.date           = data[:date]
+    object.total_grand    = data[:total_grand]
+    object.supplier_id    = data[:supplier_id]
+    object.note           = data[:note]
+    object.created_date   = Time.now
+    object.modified_date  = Time.now
+    object.created_by     = 1
+    object.modified_by    = 1
+
+    ActiveRecord::Base.transaction do
+
+      #insert to d_warehouse_import
+      begin
+        object.save
+      rescue ActiveRecord::StatementInvalid
+        return false
+      end
+      
+
+      #insert to d_warehouse_import_item
+      if(!data[:item].empty?)
+
+        WarehouseImportItem.where("import_id = #{object.import_id}").update_all(:del_flg => 1)
+        items = data[:item].values 
+        items.each do | item|
+
+          wii                = WarehouseImportItem.new
+          wii.import_id      = object.import_id
+          wii.product_id     = item[:product_id]
+          wii.price          = item[:price]
+          wii.quantity       = item[:quantity]
+          wii.total_grand    = Integer(item[:price].nil? ? 0: item[:price]) * Integer(item[:quantity].nil? ? 0: item[:quantity])
+          wii.note           = item[:note]
+          wii.created_date   = Time.now
+
+          begin
+            wii.save
+          rescue ActiveRecord::StatementInvalid
+            raise ActiveRecord::Rollback
+            return false
+          end
+          
+        end
+      end
+
+    end
+  end
+
+  def self.delete(object)
+    object.del_flg        = 1
+    object.modified_date  = Time.now
+    object.modified_by    = 1
+    return object.save
+  end
+
+  def return_false
+    return false
+  end
+
+  def self.import(object)
+@warehouse_import_items = WarehouseImportItem.get_all_by_import_id(object.import_id)
+
+    begin
+      @warehouse_import_items = WarehouseImportItem.get_all_by_import_id(object.import_id)
+    rescue Exception => e
+      return false
+    end 
+
+    if(@warehouse_import_items.empty?)      
+      return false
+    end
+
+    ActiveRecord::Base.transaction do      
+
+      @warehouse_import_items.each do | item|
+
+        #Get product
+        begin
+          product  = Product.find(item.product_id)
+        rescue ActiveRecord::StatementInvalid
+          raise ActiveRecord::Rollback
+          return false
+        end
+        
+        product.product_code  = ''
+        product.in_stock      = product.in_stock + item.quantity
+        product.modified_date = Time.now
+        product.modified_by   = 1
+        # abort product.inspect
+        #Update product
+        begin
+          product.save!
+        rescue ActiveRecord::StatementInvalid
+          raise ActiveRecord::Rollback
+          return false
+        end        
+      end
+
+
+      #update Warehouse
+      begin
+        object.import_stock = 1
+        object.save
+      rescue ActiveRecord::StatementInvalid
+        raise ActiveRecord::Rollback
+        return false
+      end
+    end
+  end
+end

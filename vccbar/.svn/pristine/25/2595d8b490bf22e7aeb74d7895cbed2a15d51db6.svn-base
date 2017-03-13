@@ -1,0 +1,175 @@
+<div class="row">
+    <div class="col-sm-2 form-group">
+      <%= label_tag(:code, "Mã Hóa Đơn:", class: "") %>
+      <br>
+      <%= text_field_tag(:code, @import[:code] , :class => 'form-control') %>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6 form-group">
+      <%= label_tag(:title, "Tiêu Đề:", class: "") %>
+      <span class="symbol required"></span><br>
+      <%= text_field_tag(:title, @import[:title] , :class => 'form-control') %>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3 form-group">
+      <label class="" for="parent_id">Nhà Cung Cấp:</label>
+      <span class="symbol required"></span></br>
+      <select name="supplier_id" id="supplier_id" class='form-control'>
+        <option value=""></option>
+        <% @suppliers.each do | supplier | %>
+          <option value="<%= supplier.supplier_id %>" 
+          <% if(supplier.supplier_id == @import.supplier_id) %> selected='selected' <% end %>>
+            <%= supplier.supplier_name %>
+          </option>
+        <% end %>
+      </select>
+    </div>
+    <div class="col-sm-3 form-group">
+      <%= label_tag(:total_grand, "Tổng Tiền:", class: "") %>
+      <br>
+      <%= text_field_tag(:total_grand, @import[:total_grand] , :class => 'form-control') %>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6 form-group">
+      <%= label_tag(:title, "Ghi Chú:", class: "") %>
+      <br>
+      <textarea class="form-control" rows="4" name="note"><%= @import.note %></textarea>
+    </div>
+</div>
+<div class="row">
+  <div class="col-sm-12 form-group">
+    <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
+      <thead>
+      <tr>
+        <th>Sản Phẩm</th>
+        <th>Đơn Giá</th>        
+        <th>Số Lượng</th>
+        <th>Đơn Vị Tính</th>
+        <th>Tổng Tiền</th>
+        <th>Ghi Chú</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+        <% if(!@warehouse_import_items.empty?) %>
+          <%- @warehouse_import_items.each_with_index do |item, i| %>
+            <tr id="item_<%= i %>" class="import-item">
+              <td>
+                <select class="form-control search-select" name="item[<%= i %>][product]">
+                  <option value="">&nbsp;</option>
+                  <% @products.each do | product | %>
+                    <option value="<%= product.product_id %>"
+                    <% if(product.product_id == item.product_id) %> selected='selected' <% end %>>
+                      <%= product.product_name %>
+                    </option>
+                  <% end %>
+                </select>
+              </td>
+              <td><input type="text" name="item[0]['price']" value="<%= item.price %>" /></td>
+              <td><input type="text" name="item[0]['quantity']" value="<%= item.quantity %>" /></td>
+              <td>
+                <select class="form-control search-select" name="item[<%= i %>][unit]">
+                  <option value="">&nbsp;</option>
+                  <% @units.each do | unit | %>
+                    <option value="<%= unit.unit_id %>"
+                    <% if(unit.unit_id == item.unit_id) %> selected='selected' <% end %>>
+                      <%= unit.unit_name %>
+                    </option>
+                  <% end %>
+                </select>              
+              </td>
+              <td><%= item.total_grand %></td>
+              <td><input type="text" name="item[0]['note']" value="<%= item.quantity %>" /></td>
+              <td>
+                <a class="btn btn-bricky btn-xs delete-item" href="javascript:void(0);">
+                  <i class="glyphicon glyphicon-remove-circle"></i>
+                </a>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>  
+        <tr id="example" class="import-item">
+          <td>
+            <select id="form-field-select-3" class="form-control search-select">
+              <option value="">&nbsp;</option>
+              <% @products.each do | product | %>
+                <option value="<%= product.product_id %>">
+                  <%= product.product_name %>
+                </option>
+              <% end %>
+            </select>
+          </td>
+          <td><input type="text" name="item[0]['price']" value="" /></td>
+          <td><input type="text" name="item[0]['quantity']" value="" /></td>
+          <td>
+            <select class="form-control search-select" name="item[0][unit]">
+              <option value="">&nbsp;</option>
+              <% @units.each do | unit | %>
+                <option value="<%= unit.unit_id %>">
+                  <%= unit.unit_name %>
+                </option>
+              <% end %>
+            </select> 
+          </td>
+          <td></td>
+          <td><input type="text" name="item[0]['note']" value="" /></td>
+          <td>
+            <a class="btn btn-bricky btn-xs delete-item" href="javascript:void(0);">
+              <i class="glyphicon glyphicon-remove-circle"></i>
+            </a>
+          </td>
+        </tr>
+        <tr class="add-import-item">
+          <td colspan="10">
+            <a class="btn btn-default btn-squared" id="btnAddItem" href="javascript:void(0);">
+              <i class="icon-plus"></i>
+              Thêm  
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>        
+<div class="row">
+  <p class="col-sm-12">
+    <%= submit_tag("Lưu", :class => 'btn btn-default', :id => 'btnSubmit') %>
+  </p>
+</div>
+
+<script type="text/javascript">
+
+  $('#btnAddItem').click(function(e){
+    e.preventDefault();
+    var item = $('#example').clone();
+    $('#example').before(item);
+  });
+
+  $('#btnSubmit').click(function(e){
+    e.preventDefault();
+    if(is_valid()){      
+      $('form').submit();
+    }
+    return;
+  });
+
+  function is_valid(){
+    $('.error').remove();
+    var valid = true;
+    // if(!$('#category_name').val()){
+    //   error = true;
+    //   $('#category_name').parents('.form-group').addClass('has-error');
+    //   $('#category_name').after('<span for="category_name" class="help-block error">Vui Nhập Danh Mục</span>');
+    // }
+    // if(!$('#parent_id').val()){
+    //   error = true;
+    //   $('#parent_id').parents('.form-group').addClass('has-error');
+    //   $('#parent_id').after('<span for="parent_id" class="help-block error">Vui Lòng Chọn</span>');
+    // }
+
+    return valid;
+  }
+</script>

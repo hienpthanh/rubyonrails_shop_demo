@@ -1,0 +1,24 @@
+<!-- start: PAGE CONTENT -->
+<div class="row">
+  <div class="col-md-12">
+    <!-- start: DYNAMIC TABLE PANEL -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <i class="icon-external-link-sign"></i>
+        Thêm Đơn Vị
+      </div>
+      <div class="panel-body">
+      <%= form_for(:unit, :url => {:action=>'create'}) do |f| %>
+              <label>Tên Đơn Vị</label><br>
+              <%= f.text_field :unit_name %>
+            </p>
+            <p>
+              <%= f.submit(:class => 'btn btn-light-grey',:value=>'Lưu') %>
+            </p>
+        <% end %>
+      </div>
+    </div>
+    <!-- end: DYNAMIC TABLE PANEL -->
+  </div>
+</div>
+<!-- end: PAGE CONTENT-->

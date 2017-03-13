@@ -18,7 +18,6 @@
         <h3 class="name"><a href="/product/<%= to_alias(product.product_name)%>.<%= product.product_id %>.html" title="<%= product.product_name%>"><%= product.product_name%></a></h3>
         <div class="rating rateit-small"></div>
         <div class="description"></div>
-
         <div class="product-price">          
           <% if(type == "sale") %>
             <span class="price">
@@ -41,18 +40,6 @@
               </button>
               <button class="btn btn-primary" type="button">Thêm Vào Giỏ</button>
                           
-            </li>
-                     
-                    <li class="lnk wishlist">
-              <a class="add-to-cart" href="index.php?page=detail" title="Wishlist">
-                 <i class="icon fa fa-heart"></i>
-              </a>
-            </li>
-
-            <li class="lnk">
-              <a class="add-to-cart" href="index.php?page=detail" title="Compare">
-                  <i class="fa fa-retweet"></i>
-              </a>
             </li>
           </ul>
         </div><!-- /.action -->

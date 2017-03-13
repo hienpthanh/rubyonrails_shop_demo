@@ -4,35 +4,130 @@
       <%= sidebar_home() %>
 
       <!-- ============================================== CONTENT ============================================== -->
-      <div class="col-xs-12 col-sm-12 col-md-9 homebanner-holder">
-        <!-- ========================================== SECTION – HERO ========================================= -->
-        <div id="hero">
-          <div id="owl-main" class="owl-carousel owl-inner-nav owl-ui-sm">
+      <div class="col-xs-12 col-sm-12 col-md-9 homebanner-holder main-content">
 
-            <% @slider_product.each do |product| %>
-              <div class="item" style="background-image: url(<%= product.product_image %>);">
-                <div class="container-fluid">
-                  <div class="caption bg-color vertical-center text-left">
-                    <div class="big-text fadeInDown-1">
-                      <%= product.product_name %>
-                    </div>
+        <!-- ============================================== SCROLL TABS ============================================== -->
+        <div id="product-tabs-slider" class="scroll-tabs wow fadeInUp">
+          <div class="more-info-tab clearfix ">
+            <h3 class="new-product-title pull-left">Sản Phẩm Mới</h3>
+            <ul class="nav nav-tabs nav-tab-line pull-right" id="new-products-1">
+              <li class="active"><a data-transition-type="backSlide" href="#all" data-toggle="tab">All</a></li>
+              <% @categories.each do |category| %>
+                <li>
+                <a data-transition-type="backSlide" href="#new_tab_<%= category.category_id%>" data-toggle="tab"><%= category.category_name%></a></li>
+              <% end %>
+            </ul><!-- /.nav-tabs -->
+          </div>
+          <div class="tab-content outer-top-xs">
+            <div class="tab-pane in active" id="all">
+              <div class="product-slider">
+                <div class="owl-carousel home-owl-carousel custom-carousel owl-theme" data-item="4">
+                  <% products = @new_product[0]%>
+                  <% products.each do |product| %>
+                    <% data = {"product": product, "type": "new"}%>
+                    <%= render partial: "product_item", object: data, as: 'data' %>
+                  <% end %>
+                </div><!-- /.home-owl-carousel -->
+              </div><!-- /.product-slider -->
+            </div><!-- /.tab-pane -->
+            <% @categories.each_with_index  do |category, i| %>
+            <div class="tab-pane" id="new_tab_<%= category.category_id%>">
+              <div class="product-slider">
+                <div class="owl-carousel home-owl-carousel custom-carousel owl-theme" data-item="4">
+                  <% products = @new_product[category.category_id]%>
+                  <% products.each do |product| %>  
+                    <% data = {"product": product, "type": "new"}%>
+                    <%= render partial: "product_item", object: data, as: 'data' %>
+                  <% end %>
+                </div><!-- /.home-owl-carousel -->
+              </div><!-- /.product-slider -->
+            </div><!-- /.tab-pane -->
+            <% end %>  
+          </div><!-- /.tab-content -->           
+        </div><!-- /.scroll-tabs -->
+        <!-- ============================================== SCROLL TABS : END ============================================== -->
+         <!-- ============================================== WIDE PRODUCTS ============================================== -->
+<!--        
+        <div class="wide-banners wow fadeInUp outer-bottom-vs">
+          <div class="row">
 
-                    <div class="excerpt fadeInDown-2 hidden-xs">
-                    <%= product.product_description %>
-                    </div>
-                    <div class="button-holder fadeInDown-3">
-                      <a href="/product/<%= to_alias(product.product_name)%>.<%= product.product_id %>.html" class="btn-lg btn btn-uppercase btn-primary shop-now-button">Chi Tiết</a>
-                    </div>
-                  </div><!-- /.caption -->
-                </div><!-- /.container-fluid -->
-              </div><!-- /.item -->
+            <div class="col-md-12">
+              <div class="wide-banner cnt-strip">
+                <div class="image">
+                  <img class="img-responsive" data-echo="/assets/images/banners/3.jpg" src="/assets/images/blank.gif" alt="">
+                </div>  
+                <div class="strip strip-text">
+                  <div class="strip-inner">
+                    <h2 class="text-right">one stop place for<br>
+                    <span class="shopping-needs">all your shopping needs</span></h2>
+                  </div>  
+                </div>
+                <div class="new-label">
+                    <div class="text">NEW</div>
+                </div><!-- /.new-label -->
+<!--                
+              </div><!-- /.wide-banner -->
+<!--              
+            </div><!-- /.col -->
+<!--
+          </div><!-- /.row -->
+<!--          
+        </div><!-- /.wide-banners -->
+        <!-- ============================================== WIDE PRODUCTS : END ============================================== -->
+        <!-- ============================================== FEATURED PRODUCTS ============================================== -->
+        <section class="section featured-product wow fadeInUp">
+          <h3 class="section-title">Sản Phẩm Hot</h3>
+          <div class="owl-carousel home-owl-carousel custom-carousel owl-theme outer-top-xs">
+            <% products = @hot_product %>
+            <% products.each do |product| %>  
+              <% data = {"product": product, "type": "hot"}%>
+              <%= render partial: "product_item", object: data, as: 'data' %>
             <% end %>
-          </div><!-- /.owl-carousel -->
-        </div>
-        
-        <!-- ========================================= SECTION – HERO : END ========================================= --> 
+          </div><!-- /.home-owl-carousel -->
+        </section><!-- /.section -->
+        <!-- ============================================== FEATURED PRODUCTS : END ============================================== -->
+        <!-- ============================================== WIDE PRODUCTS ============================================== -->
+<!--        
+        <div class="wide-banners wow fadeInUp outer-bottom-vs">
+          <div class="row">
 
-        <!-- ============================================== INFO BOXES ============================================== -->
+            <div class="col-md-12">
+              <div class="wide-banner cnt-strip">
+                <div class="image">
+                  <img class="img-responsive" data-echo="/assets/images/banners/3.jpg" src="/assets/images/blank.gif" alt="">
+                </div>  
+                <div class="strip strip-text">
+                  <div class="strip-inner">
+                    <h2 class="text-right">one stop place for<br>
+                    <span class="shopping-needs">all your shopping needs</span></h2>
+                  </div>  
+                </div>
+                <div class="new-label">
+                    <div class="text">NEW</div>
+                </div><!-- /.new-label -->
+<!--                
+              </div><!-- /.wide-banner -->
+<!--              
+            </div><!-- /.col -->
+<!--
+          </div><!-- /.row -->
+<!--          
+        </div><!-- /.wide-banners -->
+        <!-- ============================================== WIDE PRODUCTS : END ============================================== -->
+        <!-- ============================================== BEST SELLER ============================================== -->
+        <section class="section featured-product wow fadeInUp">
+          <h3 class="section-title">Sản Phẩm Giảm Giá</h3>
+          <div class="owl-carousel home-owl-carousel custom-carousel owl-theme outer-top-xs">
+            <% products = @special_product %>
+            <% products.each do |product| %>  
+              <% data = {"product": product, "type": "sale"}%>
+              <%= render partial: "product_item", object: data, as: 'data' %>
+            <% end %>
+          </div><!-- /.home-owl-carousel -->
+        </section><!-- /.section -->
+        <!-- ============================================== BEST SELLER : END ============================================== -->  
+
+<!-- ============================================== INFO BOXES ============================================== -->
         <div class="info-boxes wow fadeInUp">
           <div class="info-boxes-inner">
             <div class="row">
@@ -82,133 +177,12 @@
           
         </div><!-- /.info-boxes -->
         <!-- ============================================== INFO BOXES : END ============================================== -->
-        <!-- ============================================== SCROLL TABS ============================================== -->
-        <div id="product-tabs-slider" class="scroll-tabs outer-top-vs wow fadeInUp">
-          <div class="more-info-tab clearfix ">
-            <h3 class="new-product-title pull-left">Sản Phẩm Mới</h3>
-            <ul class="nav nav-tabs nav-tab-line pull-right" id="new-products-1">
-              <li class="active"><a data-transition-type="backSlide" href="#all" data-toggle="tab">All</a></li>
-              <% @categories.each do |category| %>
-                <li>
-                <a data-transition-type="backSlide" href="#new_tab_<%= category.category_id%>" data-toggle="tab"><%= category.category_name%></a></li>
-              <% end %>
-            </ul><!-- /.nav-tabs -->
-          </div>
-          <div class="tab-content outer-top-xs">
-            <div class="tab-pane in active" id="all">
-              <div class="product-slider">
-                <div class="owl-carousel home-owl-carousel custom-carousel owl-theme" data-item="4">
-                  <% products = @new_product[0]%>
-                  <% products.each do |product| %>
-                    <% data = {"product": product, "type": "new"}%>
-                    <%= render partial: "product_item", object: data, as: 'data' %>
-                  <% end %>
-                </div><!-- /.home-owl-carousel -->
-              </div><!-- /.product-slider -->
-            </div><!-- /.tab-pane -->
-            <% @categories.each_with_index  do |category, i| %>
-            <div class="tab-pane" id="new_tab_<%= category.category_id%>">
-              <div class="product-slider">
-                <div class="owl-carousel home-owl-carousel custom-carousel owl-theme" data-item="4">
-                  <% products = @new_product[category.category_id]%>
-                  <% products.each do |product| %>  
-                    <% data = {"product": product, "type": "new"}%>
-                    <%= render partial: "product_item", object: data, as: 'data' %>
-                  <% end %>
-                </div><!-- /.home-owl-carousel -->
-              </div><!-- /.product-slider -->
-            </div><!-- /.tab-pane -->
-            <% end %>  
-          </div><!-- /.tab-content -->           
-        </div><!-- /.scroll-tabs -->
-        <!-- ============================================== SCROLL TABS : END ============================================== -->
-        <!-- ============================================== WIDE PRODUCTS ============================================== -->
-        <div class="wide-banners wow fadeInUp outer-bottom-vs">
-          <div class="row">
 
-            <div class="col-md-7">
-              <div class="wide-banner cnt-strip">
-                <div class="image">
-                  <img class="img-responsive" data-echo="/assets/images/banners/1.jpg" src="/assets/images/blank.gif" alt="">
-                </div>
-                <div class="strip">
-                  <div class="strip-inner">
-                    <h3 class="hidden-xs">samsung</h3>
-                    <h2>galaxy</h2>
-                  </div>
-                </div>
-              </div><!-- /.wide-banner -->
-            </div><!-- /.col -->
-
-            <div class="col-md-5">
-              <div class="wide-banner cnt-strip">
-                <div class="image">
-                  <img class="img-responsive" data-echo="/assets/images/banners/2.jpg" src="/assets/images/blank.gif" alt="">
-                </div>
-                <div class="strip">
-                  <div class="strip-inner">
-                    <h3 class="hidden-xs">new trend</h3>
-                    <h2>watch phone</h2>
-                  </div>
-                </div>
-              </div><!-- /.wide-banner -->
-            </div><!-- /.col -->
-
-          </div><!-- /.row -->
-        </div><!-- /.wide-banners -->
-        <!-- ============================================== WIDE PRODUCTS : END ============================================== -->
-        <!-- ============================================== FEATURED PRODUCTS ============================================== -->
-        <section class="section featured-product wow fadeInUp">
-          <h3 class="section-title">Sản Phẩm Hot</h3>
-          <div class="owl-carousel home-owl-carousel custom-carousel owl-theme outer-top-xs">
-            <% products = @hot_product %>
-            <% products.each do |product| %>  
-              <% data = {"product": product, "type": "hot"}%>
-              <%= render partial: "product_item", object: data, as: 'data' %>
-            <% end %>
-          </div><!-- /.home-owl-carousel -->
-        </section><!-- /.section -->
-        <!-- ============================================== FEATURED PRODUCTS : END ============================================== -->
-        <!-- ============================================== WIDE PRODUCTS ============================================== -->
-        <div class="wide-banners wow fadeInUp outer-bottom-vs">
-          <div class="row">
-
-            <div class="col-md-12">
-              <div class="wide-banner cnt-strip">
-                <div class="image">
-                  <img class="img-responsive" data-echo="/assets/images/banners/3.jpg" src="/assets/images/blank.gif" alt="">
-                </div>  
-                <div class="strip strip-text">
-                  <div class="strip-inner">
-                    <h2 class="text-right">one stop place for<br>
-                    <span class="shopping-needs">all your shopping needs</span></h2>
-                  </div>  
-                </div>
-                <div class="new-label">
-                    <div class="text">NEW</div>
-                </div><!-- /.new-label -->
-              </div><!-- /.wide-banner -->
-            </div><!-- /.col -->
-
-          </div><!-- /.row -->
-        </div><!-- /.wide-banners -->
-        <!-- ============================================== WIDE PRODUCTS : END ============================================== -->
-        <!-- ============================================== BEST SELLER ============================================== -->
-        <section class="section featured-product wow fadeInUp">
-          <h3 class="section-title">Sản Phẩm Hot</h3>
-          <div class="owl-carousel home-owl-carousel custom-carousel owl-theme outer-top-xs">
-            <% products = @special_product %>
-            <% products.each do |product| %>  
-              <% data = {"product": product, "type": "sale"}%>
-              <%= render partial: "product_item", object: data, as: 'data' %>
-            <% end %>
-          </div><!-- /.home-owl-carousel -->
-        </section><!-- /.section -->
-        <!-- ============================================== BEST SELLER : END ============================================== -->  
       </div><!-- /.homebanner-holder -->
       <!-- ============================================== CONTENT : END ============================================== -->
     </div><!-- /.row -->
     <!-- ============================================== BRANDS CAROUSEL ============================================== -->
+<!--    
     <div id="brands-carousel" class="logo-slider wow fadeInUp">
       <h3 class="section-title">Our Brands</h3>
       <div class="logo-slider-inner"> 
@@ -218,63 +192,65 @@
               <img data-echo="/assets/images/brands/brand1.png" src="/assets/images/blank.gif" alt="">
             </a>  
           </div><!--/.item-->
-
+<!--
           <div class="item m-t-10">
             <a href="#" class="image">
               <img data-echo="/assets/images/brands/brand2.png" src="/assets/images/blank.gif" alt="">
             </a>  
           </div><!--/.item-->
-
+<!--
           <div class="item">
             <a href="#" class="image">
               <img data-echo="/assets/images/brands/brand3.png" src="/assets/images/blank.gif" alt="">
             </a>  
           </div><!--/.item-->
-
+<!--
           <div class="item">
             <a href="#" class="image">
               <img data-echo="/assets/images/brands/brand4.png" src="/assets/images/blank.gif" alt="">
             </a>  
           </div><!--/.item-->
-
+<!--
           <div class="item">
             <a href="#" class="image">
               <img data-echo="/assets/images/brands/brand5.png" src="/assets/images/blank.gif" alt="">
             </a>  
           </div><!--/.item-->
-
+<!--
           <div class="item">
             <a href="#" class="image">
               <img data-echo="/assets/images/brands/brand6.png" src="/assets/images/blank.gif" alt="">
             </a>  
           </div><!--/.item-->
-
+<!--
           <div class="item">
             <a href="#" class="image">
               <img data-echo="/assets/images/brands/brand2.png" src="/assets/images/blank.gif" alt="">
             </a>  
           </div><!--/.item-->
-
+<!--
           <div class="item">
             <a href="#" class="image">
               <img data-echo="/assets/images/brands/brand4.png" src="/assets/images/blank.gif" alt="">
             </a>  
           </div><!--/.item-->
-
+<!--
           <div class="item">
             <a href="#" class="image">
               <img data-echo="/assets/images/brands/brand1.png" src="/assets/images/blank.gif" alt="">
             </a>  
           </div><!--/.item-->
-
+<!--
           <div class="item">
             <a href="#" class="image">
               <img data-echo="/assets/images/brands/brand5.png" src="/assets/images/blank.gif" alt="">
             </a>  
           </div><!--/.item-->
+<!--          
           </div><!-- /.owl-carousel #logo-slider -->
+<!--          
       </div><!-- /.logo-slider-inner -->
-      
+<!--      
     </div><!-- /.logo-slider -->
     <!-- ============================================== BRANDS CAROUSEL : END ============================================== -->
   </div><!-- /.container -->

@@ -1,0 +1,48 @@
+<!-- start: PAGE CONTENT -->
+      <div class="row">
+        <div class="col-md-12">
+          <!-- start: DYNAMIC TABLE PANEL -->
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <i class="icon-external-link-sign"></i>
+              Chi Tiết Đơn Hàng
+            </div>
+            <div class="panel-body">
+              <%= error_messages_for() %>
+              <p>
+                <strong>Tên người mua chính:</strong> <%= @order.customer_name %> <br>
+                <strong>Email:</strong> <%= @order.customer_email %> <br>
+                <strong>Số điện thoại:</strong> <%= @order.customer_phone %>
+              </p>
+              <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
+                <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Tên sản phẩm</th>
+                  <th>Số lượng</th>
+                  <th>Đơn giá</th>
+                  <th>Thành tiền</th>
+                  <th>Ngày mua</th>
+                  <th>Người mua</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% @orderitems.each do |oi| %>
+                  <tr>
+                    <td><%= oi.order_item_id %></td>
+                    <td><%= oi.product_name %></td>
+                    <td><% if oi.quantity %>1<% else %>0<% end %></td>
+                    <td><%= oi.price %></td>
+                    <td><%= oi.total_grand %></td>
+                    <td><%= oi.created_date.strftime("%d-%m-%Y") %></td>
+                    <td><%= oi.customer_last_name  + ' ' +  oi.customer_first_name %></td>
+                  </tr>
+                <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- end: DYNAMIC TABLE PANEL -->
+        </div>
+      </div>
+      <!-- end: PAGE CONTENT-->

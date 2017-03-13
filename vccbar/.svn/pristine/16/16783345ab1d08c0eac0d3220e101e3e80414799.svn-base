@@ -1,0 +1,67 @@
+<!-- start: PAGE CONTENT -->
+<div class="row">
+  <div class="col-md-12">
+    <!-- start: DYNAMIC TABLE PANEL -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <i class="icon-external-link-sign"></i>
+        Thêm Danh Mục
+      </div>
+      <div class="panel-body">
+        <%= error_messages_for() %>
+        <%= form_tag("/category/create", method: "post", id: "category") do %>
+            <div class="row">
+                <div class="col-sm-3 form-group">
+                  <%= label_tag(:category_name, "Tên Danh Mục:", class: "") %>
+                  <span class="symbol required"></span><br>
+                  <%= text_field_tag(:category_name, '' , :class => 'form-control col-sm-2') %>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3 form-group">
+                  <label class="" for="parent_id">Danh Mục Cha:</label></br>
+                  <select name="parent_id" id="parent_id" class='form-control col-sm-2'>
+                    <%= category_list()%>
+                  </select>
+                </div>
+            </div>
+            <div class="row">
+              <p class="col-sm-12">
+                <%= submit_tag("Lưu", :class => 'btn btn-default', :id => 'btnSubmit') %>
+              </p>
+            </div>
+        <% end %>
+
+      </div>
+    </div>
+    <!-- end: DYNAMIC TABLE PANEL -->
+  </div>
+</div>
+<!-- end: PAGE CONTENT-->
+<script type="text/javascript">
+
+  $('#btnSubmit').click(function(e){
+    e.preventDefault();
+    if(!validate()){      
+      $('#category').submit();
+    }
+    return;
+  });
+
+  function validate(){
+    $('.error').remove();
+    var error = false;
+    if(!$('#category_name').val()){
+      error = true;
+      $('#category_name').parents('.form-group').addClass('has-error');
+      $('#category_name').after('<span for="category_name" class="help-block error">Vui Nhập Danh Mục</span>');
+    }
+    // if(!$('#parent_id').val()){
+    //   error = true;
+    //   $('#parent_id').parents('.form-group').addClass('has-error');
+    //   $('#parent_id').after('<span for="parent_id" class="help-block error">Vui Lòng Chọn</span>');
+    // }
+
+    return error;
+  }
+</script>

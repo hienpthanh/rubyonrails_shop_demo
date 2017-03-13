@@ -1,0 +1,34 @@
+ <!-- start: PAGE CONTENT -->
+<div class="row">
+  <div class="col-sm-6"> 
+    <p>
+      <%= link_to(products_path, :class=>"btn btn-teal btn-squared") do %>
+        <i class="icon-arrow-left"></i>
+        Trở Về  
+      <% end %>
+    </p>
+  </div>
+  <div class="col-sm-6 text-right">
+  </div>
+</div> 
+<div class="row">
+  <div class="col-md-12">
+    <!-- start: DYNAMIC TABLE PANEL -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <i class="icon-external-link-sign"></i>
+        Thêm Sản Phẩm
+        <div class="panel-tools">
+          <a class="btn btn-xs btn-link panel-collapse collapses" href="#">
+          </a>
+          <a class="btn btn-xs btn-link panel-expand" href="#">
+            <i class="icon-resize-full"></i>
+          </a>
+        </div>
+      </div>
+      <%= render 'form' %>
+      </div>
+  <!-- end: DYNAMIC TABLE PANEL -->
+  </div>
+</div>
+<!-- end: PAGE CONTENT-->

@@ -1,0 +1,67 @@
+      <!-- start: PAGE CONTENT -->
+      <div class="row">
+        <div class="col-md-12">
+          <!-- start: DYNAMIC TABLE PANEL -->
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <i class="icon-external-link-sign"></i>
+              Danh Sách Đơn Hàng
+            </div>
+            <div class="panel-body">
+              <%= error_messages_for() %>
+              <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
+                <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Người Mua</th>
+                  <th>Email</th>
+                  <th>Số điện thoại</th>
+                  <th>Mã coupon</th>
+                  <th>Tổng tiền</th>
+                  <th>Giảm giá</th>
+                  <th>Thành tiền</th>
+                  <th>Ngày Mua</th>
+                  <th>Người Cập Nhật</th>
+                  <th>Ngày Cập Nhật</th>
+                  <th>Trạng thái</th>
+                  <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% @orders.each do |o| %>
+                  <tr>
+                    <td><%= o.order_id %></td>
+                    <td><%= o.customer_name %></td>
+                    <td><%= o.customer_email %></td>
+                    <td><%= o.customer_phone %></td>
+                    <td><%= o.coupon_code %></td>
+                    <td><%= o.total_price %></td>
+                    <td><%= o.discount %></td>
+                    <td><%= o.total_grand %></td>
+                    <td><%= o.created_date.strftime("%d-%m-%Y") %></td>
+                    <td><%= o.modified_last_name  + ' ' +  o.modified_first_name %></td>
+                    <td><%= o.modified_date.strftime("%d-%m-%Y") %></td>
+                    <td>
+                      <a data-confirm="Are you sure?" class="btn <% if o.status %>btn-primary <% else %> btn-bricky <% end %> btn-xs" href="/orders/<%= o.order_id %>/changestatus">
+                        <% if o.status %>
+                          Hoàn tất
+                        <% else %>
+                          Hủy
+                        <% end %>
+                      </a>
+                    </td>
+                    <td>
+                      <a class="btn btn-success btn-xs" href="/orders/<%= o.order_id %>/orderitems">
+                        <i class="icon-eye-open"></i>
+                      </a>
+                    </td>
+                  </tr>
+                <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- end: DYNAMIC TABLE PANEL -->
+        </div>
+      </div>
+      <!-- end: PAGE CONTENT-->

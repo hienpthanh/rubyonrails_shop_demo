@@ -1,0 +1,15 @@
+<div class="pagination-container">
+  <ul class="list-inline list-unstyled">
+    <li class="prev"><a href='<%= generate_new_url([{name: "page", value: @first_page}]) %>'><i class="fa fa-angle-left"></i><i class="fa fa-angle-left"></i></a></li>
+    <li class="prev"><a href="<%= generate_new_url([{name: "page", value: @previous_page}]) %>"><i class="fa fa-angle-left"></i></a></li>
+    <% for i in @start..@end %>
+      <% if(i == @current_page) %>        
+        <li class="active"><a href="javascript:void(0)"><%= i %></a></li> 
+      <% else %>
+        <li><a href="<%= generate_new_url([{name: "page", value: i}]) %>"><%= i %></a></li>
+      <% end %>  
+    <% end %>
+    <li class="next"><a href="<%= generate_new_url([{name: "page", value: @next_page}]) %>"><i class="fa fa-angle-right"></i></a></li>
+    <li class="next"><a href="<%= generate_new_url([{name: "page", value: @last_page}]) %>"><i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></a></li>
+  </ul><!-- /.list-inline -->
+</div>

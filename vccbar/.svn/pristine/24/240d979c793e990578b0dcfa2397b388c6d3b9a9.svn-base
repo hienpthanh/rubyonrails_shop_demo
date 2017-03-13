@@ -1,0 +1,168 @@
+<!-- start: PAGE CONTENT -->
+<% if(@import.import_stock != 1 && @import.import_stock != true) %>
+  <p class="text-right">
+    <%= link_to("/warehouse/#{@import.import_id}", :class=>"btn btn-primary btn-squared") do %>
+      <i class="icon-edit"></i>
+      Cập Nhật  
+    <% end %>
+    <%= link_to("/warehouse/import/#{@import.import_id}", :class=>"btn btn-green btn-squared") do %>
+      <i class="icon-plus"></i>
+      Nhập Kho  
+    <% end %>
+  </p>
+<% end %>
+<div class="row">
+  <div class="col-md-12">
+    <!-- start: DYNAMIC TABLE PANEL -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <i class="icon-external-link-sign"></i>
+        Thêm Danh Mục
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-sm-8 table-responsive">
+            <h3>Chi Tiết Phiếu Nhập Kho</h3>
+            <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
+              <tbody>
+                <tr>
+                  <th width="20%">
+                    Mã Hóa Đơn
+                  </th>
+                  <td width="30%">
+                    <%= @import[:code] %>
+                  </td>
+                  <th width="20%">
+                    Ngày
+                  </th>
+                  <td width="30%">
+                    <%= @import[:date].nil? ? '' : @import[:date].strftime("%d-%m-%Y") %>
+                  </td>
+                </tr>
+                <tr>
+                  <th>
+                    Tiêu Đề
+                  </th>
+                  <td colspan="3">
+                    <%= @import[:title] %>
+                  </td>
+                </tr>
+                <tr>
+                  <th>
+                    Nhà Cung Cấp
+                  </th>
+                  <td colspan="3">
+                    <%= @import[:supplier_name] %>
+                  </td>
+                </tr>
+                <tr>
+                  <th>
+                    Trạng Thái
+                  </th>
+                  <td>
+                    <% if(@import[:import_stock] == 1) %>
+                      Đã Nhập Kho
+                    <% else %>
+                      Chưa Nhập Kho
+                    <% end %>
+                  </td>
+                  <th>
+                    Tổng Tiền
+                  </th>
+                  <td class="text-right">
+                    <%= @import[:total_grand] %>
+                  </td>
+                </tr>
+                <tr>
+                  <th>
+                    Người Lập Phiếu
+                  </th>
+                  <td>
+                    <%= @import[:created_last_name] %> <%= @import[:created_first_name] %>
+                  </td> 
+                  <th>
+                    Ngày Lập Phiếu
+                  </th>
+                  <td>
+                    <%= @import[:created_date].strftime("%d-%m-%Y %H:%M:%S") %>
+                  </td>
+                </tr>
+                <% if(@import[:modified_by]) %>
+                  <tr>
+                    <th>
+                      Người Cập Nhật
+                    </th>
+                    <td>
+                      <%= @import[:modified_last_name] %> <%= @import[:modified_first_name] %>
+                    </td> 
+                    <th>
+                      Ngày Cập Nhật
+                    </th>
+                    <td>
+                      <%= @import[:modified_date].strftime("%d-%m-%Y %H:%M:%S") %>
+                    </td>
+                  </tr>
+                <% end %>
+                <tr>
+                  <th>
+                    Ghi Chú
+                  </th>
+                  <td colspan="3">
+                    <%= @import[:note] %>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="row">          
+          <div class="col-sm-12 table-responsive">
+            <h3>Danh Sách Sản Phẩm</h3>
+            <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
+              <thead>
+              <tr>
+                <th width="5%">No</th>
+                <th width="30%">Sản Phẩm</th>
+                <th width="12%">Đơn Giá</th>        
+                <th width="7%">Số Lượng</th>
+                <th width="9%">Đơn Vị Tính</th>
+                <th width="17%">Tổng Tiền</th>
+                <th width="20%">Ghi Chú</th>
+              </tr>
+              </thead>
+              <tbody>
+                <%- @warehouse_import_items.each_with_index do |item, i| %>
+                  <tr>
+                    <td class="center">
+                      <%= (i + 1)%>
+                    </td>
+                    <td>
+                      <%= item.product_name %>
+                    </td>
+                    <td class="text-right">            
+                      <%= item.price %>
+                    </td>
+                    <td class="text-right">
+                      <%= item.quantity %>
+                    </td>
+                    <td class="center">
+                      <%= item.unit_name %>
+                    </td>
+                    <td class="text-right">
+                      <%= item.total_grand %>
+                    </td>
+                    <td >
+                      <%= item.note %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>     
+      </div>
+    </div>
+    <!-- end: DYNAMIC TABLE PANEL -->
+  </div>
+</div>
+<!-- end: PAGE CONTENT-->

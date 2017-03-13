@@ -1,0 +1,99 @@
+<!-- start: PAGE CONTENT -->
+<div class="row">
+  <div class="col-sm-6"> 
+    <p>
+      <%= link_to(products_path, :class=>"btn btn-teal btn-squared") do %>
+        <i class="icon-arrow-left"></i>
+        Trở Về  
+      <% end %>
+    </p>
+  </div>
+  <div class="col-sm-6 text-right">
+    <p>
+        <%= link_to(edit_product_path(@product), :class=>"btn btn-primary btn-squared") do %>
+          <i class="icon-edit"></i>
+          Cập Nhật  
+        <% end %>
+    </p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <!-- start: DYNAMIC TABLE PANEL -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <i class="icon-external-link-sign"></i>
+        Sản Phẩm
+      </div>
+      <div class="panel-body">
+        <!-- <p id="notice"><%= notice %></p> -->
+        <%- @products.each do |product| %>
+        <table class="tbl_show">
+          <tr>
+            <th>Tên Sản Phẩm:</th>
+            <td><%= product.product_name %></td>
+          </tr>
+          <tr>
+            <th>Category:</th>
+            <td><%=  product.category_name  %></td>
+          </tr>
+          <tr>
+            <th>Mã Code:</th>
+            <td><%= product.product_code %></td>
+          </tr>
+          <tr>
+            <th>Mô Tả Sản Phẩm:</th>
+            <td><%= product.product_description %></td>
+          </tr>
+          <tr>
+            <th>Giá:</th>
+            <td><label class="price"><%= product.price %></label></td>
+          </tr>
+          <tr>
+            <th>Giảm Giá:</th>
+            <td><label class="price_special"><%= product.price_special %></label></td>
+          </tr>
+          <tr>
+            <th>Số Lượng:</th>
+            <td><%= product.in_stock %></td>
+          </tr>
+          <tr>
+            <th>Đơn Vị:</th>
+            <td><%= product.unit_name %></td>
+          </tr>
+          <tr>
+            <th>Sản Phẩm Hot:</th>
+            <td>
+              <% if product.is_hot %>
+                <i class="clip-checkmark-circle-2"> </i>
+              <% else %>
+                <i class="clip-close"> </i>
+              <% end %>
+            </td>
+          </tr>
+          <tr>
+            <th>Sản Phẩm Slider:</th>
+            <td>
+              <% if product.is_slider %>
+                <i class="clip-checkmark-circle-2"> </i>
+              <% else %>
+                <i class="clip-close"> </i>
+              <% end %>
+            </td>
+          </tr>
+          <tr>
+            <th>Trạng Thái:</th>
+            <td>
+              <% if product.is_active %>
+                <i class="clip-checkmark-circle-2"> </i>
+              <% else %>
+                <i class="clip-close"> </i>
+              <% end %>
+            </td>
+          </tr>
+        </table>
+      <% end %>
+      </div>
+    </div>
+  </div>
+</div>

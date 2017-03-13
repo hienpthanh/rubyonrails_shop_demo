@@ -1,0 +1,90 @@
+<!-- start: PAGE CONTENT -->
+<!-- <p id="notice"><%= notice %></p> -->
+<!-- <p><%= link_to "New Product", new_product_path, class: "btn btn-light-grey" %></p> -->
+<p class="text-right">
+<%= link_to(new_product_path, :class=>"btn btn-light-grey") do %>
+  Thêm
+  <i class="icon-plus"></i>
+<% end %>
+</p>
+<div class="row">
+  <div class="col-md-12">
+    <!-- start: DYNAMIC TABLE PANEL -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <i class="icon-external-link-sign"></i>
+        Danh Sách Sản Phẩm
+      </div>
+      <div class="panel-body">
+        <% if notice != nil%>
+          <div class="alert alert-success">
+            <button data-dismiss="alert" class="close">
+              ×
+            </button>
+            <i class="icon-ok-sign"></i>
+            <%= notice %>
+        </div>
+        <% end %>
+        <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
+          <thead>
+          <tr id="header">
+            <th>ID</th>
+            <th>Danh Mục</th>
+            <th>Sản Phẩm</th>
+            <th>Mã</th>
+            <th>Giá</th>
+            <th>Giảm Giá</th>
+            <th>Đơn Vị</th>
+            <th>Trạng Thái</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <%- @products.each do |product, k| %>
+            <tr>
+              <td class="text_center"><%= product.product_id %></td>
+              <td><%= product.category_name %></td>
+              <td class="td_word_break"><%= product.product_name %></td>
+              <td><%= product.product_code %></td>
+              <td class="text_right"><%= product.price %></td>
+              <td class="text_right"><%= product.price_special %></td>
+              <td><%= product.unit_name %></td>
+              <!-- <td><%= hidden_field_tag :is_active, 'false' %>
+                  <%= check_box_tag :is_active, true, product.is_active? %>
+              </td> -->
+              <td class="text_center">
+                <% if product.is_active %>
+                  <%= link_to("products/active/#{product.product_id}", data: { confirm: 'Are you sure?' }) do %>
+                      <i class="clip-checkmark-circle-2"> </i>
+                  <% end %>
+                <% else %>
+                  <%= link_to("products/active/#{product.product_id}", data: { confirm: 'Are you sure?' }) do %>
+                      <i class="clip-close"> </i>
+                  <% end %>
+                <% end %>
+              </td>
+              <td class="text_center">
+                <%= link_to(edit_product_path(product), :class=>"btn btn-primary btn-xs") do %>
+                    <i class="icon-edit"></i>
+                <% end %>
+                <%= link_to("products/delete/#{product.product_id}", data: { confirm: 'Are you sure?' }, :class=>"btn btn-bricky btn-xs") do %>
+                    <i class="glyphicon glyphicon-remove-circle"></i>
+                <% end %>
+                <%= link_to(product, :class=>"btn btn-primary btn-xs") do %>
+                    <i class="clip-eye"></i>
+                <% end %>
+                <!-- <%= link_to 'Show', product %> -->
+                <!-- <%= link_to 'Edit', edit_product_path(product) %>
+                <%= link_to 'Destroy', product, method: :delete, data: { confirm: 'Are you sure?' } %>
+              </td> -->
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+        <p><%= will_paginate @orders %></p>
+      </div>
+    </div>
+    <!-- end: DYNAMIC TABLE PANEL -->
+  </div>
+</div>
+<!-- end: PAGE CONTENT-->

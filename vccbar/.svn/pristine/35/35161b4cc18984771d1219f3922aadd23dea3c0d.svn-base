@@ -1,0 +1,19 @@
+.breadcrumb{
+	border-bottom: none;
+	background: none;
+}
+.margin-b-0{
+	margin-bottom: 0;
+}
+
+.import-item .select2-container .select2-choice{
+	margin-top: 0px !important;
+}
+
+.has-error .select2-container .select2-choice{
+	border-color: #b94a48 !important;
+}
+
+.breadcrumb {
+	height: 0px !important;
+}

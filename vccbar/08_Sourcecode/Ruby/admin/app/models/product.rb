@@ -1,0 +1,105 @@
+class Product < ActiveRecord::Base
+  self.table_name = 'd_product'
+  self.primary_key = 'product_id'
+  # mount_uploader :product_image, ProductImageUploader
+  validates :product_name, presence: true
+  # validates :in_stock, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  # validates :price, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  # validates :price_special, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  belongs_to :category
+  belongs_to :unit
+  def self.add(data,object)
+    price = 0
+    price_special = 0
+    if !data[:price].empty?
+      price = data[:price].gsub(",","")
+    end
+    if !data[:price_special].empty?
+      price_special = data[:price_special].gsub(",","")
+    end
+    # product = self.new
+    object.category_id = data[:category_id]
+    object.product_name  = data[:product_name]
+    object.product_code = data[:product_code]
+    object.product_description = data[:product_description]
+    object.product_image = 1
+    object.price = price
+    object.price_special = price_special
+    # product.in_stock = data[:in_stock]
+    object.is_active = data[:is_active]
+    object.unit_id = data[:unit_id]
+    object.is_hot = data[:is_hot]
+    object.is_slider = data[:is_slider]
+    object.created_date   = Time.now
+    object.modified_date  = Time.now
+    object.created_by     = 1
+    object.modified_by    = 1
+    return object.save
+  end
+
+  def self.remove_data(object)
+    object.del_flg        = 1
+    object.modified_date  = Time.now
+    object.modified_by    = 1
+    return object.save
+  end
+
+  def self.active_data(object)
+    active_old = object.is_active
+    if  active_old
+      object.is_active = 0
+    else
+      object.is_active = 1
+    end
+    object.modified_date  = Time.now
+    object.modified_by    = 1
+    return object.save
+  end
+
+  def self.update_data(data, object)
+    price = 0
+    price_special = 0
+    if !data[:price].empty?
+      price = data[:price].gsub(",","")
+    end
+    if !data[:price_special].empty?
+      price_special = data[:price_special].gsub(",","")
+    end
+    object.category_id = data[:category_id]
+    object.product_name  = data[:product_name]
+    object.product_code = data[:product_code]
+    object.product_description = data[:product_description]
+    object.product_image = 1
+    object.price = price
+    object.price_special = price_special
+    # object.in_stock = data[:in_stock]
+    object.is_active = data[:is_active]
+    object.unit_id = data[:unit_id]
+    object.is_hot = data[:is_hot]
+    object.is_slider = data[:is_slider]
+    object.modified_date  = Time.now
+    object.modified_by    = 1
+    return object.save
+  end
+  def self.get_show(id)
+    Product.select('*').where('d_product.product_id = ?', id).joins(:category,:unit).where(:d_category => {:del_flg => 0},:d_unit => {:del_flg => 0})
+  end
+  def self.get_all()
+    Product.select('*').where('d_product.del_flg = 0').joins(:category,:unit).where(:d_category => {:del_flg => 0},:d_unit => {:del_flg => 0})
+  end
+  def self.get_products
+    sql = <<-SQL 
+        SELECT 
+          p.product_id, 
+          p.product_name,
+          p.price,
+          p.price_special,
+          p.unit_id
+        FROM
+          d_product AS p
+        WHERE p.del_flg = 0
+        ORDER BY p.product_name ASC
+    SQL
+    return self.find_by_sql(sql) 
+  end
+end

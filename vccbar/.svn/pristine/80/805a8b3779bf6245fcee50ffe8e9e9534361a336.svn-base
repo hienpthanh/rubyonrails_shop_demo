@@ -1,0 +1,309 @@
+<link rel="stylesheet" href="/assets/plugins/select2/select2.css">
+<link rel="stylesheet" href="/assets/plugins/datepicker/css/datepicker.css">
+<script src="/assets/plugins/select2/select2.min.js"></script>
+<script src="/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<div class="row">
+    <div class="col-sm-2 form-group">
+      <%= label_tag(:code, "Mã Hóa Đơn:", class: "") %>
+      <br>
+      <%= text_field_tag(:code, @import[:code] , :class => 'form-control') %>
+    </div>
+    <div class="col-sm-4">
+      <%= label_tag(:date, "Hóa Đơn Ngày:", class: "") %>
+      <span class="symbol required"></span><br>
+      <div class="input-group">
+        <input type="text" id="date" data-date-format="dd-mm-yyyy" data-date-viewmode="years" class="form-control date-picker" name="date" value="<%= @import[:date].nil? ? Time.now.strftime("%d-%m-%Y"): @import[:date].strftime("%d-%m-%Y") %>">
+        <span class="input-group-addon"> <i class="icon-calendar"></i> </span>
+      </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6 form-group">
+      <%= label_tag(:title, "Tiêu Đề:", class: "") %>
+      <span class="symbol required"></span><br>
+      <%= text_field_tag(:title, @import[:title] , :class => 'form-control') %>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3 form-group">
+      <label class="" for="parent_id">Nhà Cung Cấp:</label>
+      <span class="symbol required"></span></br>
+      <select name="supplier_id" id="supplier_id" class='form-control'>
+        <option value=""></option>
+        <% @suppliers.each do | supplier | %>
+          <option value="<%= supplier.supplier_id %>" 
+          <% if(supplier.supplier_id == @import.supplier_id) %> selected='selected' <% end %>>
+            <%= supplier.supplier_name %>
+          </option>
+        <% end %>
+      </select>
+    </div>
+    <div class="col-sm-3 form-group">
+      <%= label_tag(:total_grand, "Tổng Tiền:", class: "") %>
+      <br>
+      <%= text_field_tag(:total_grand, @import[:total_grand] , :class => 'form-control text-right') %>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6 form-group">
+      <%= label_tag(:title, "Ghi Chú:", class: "") %>
+      <br>
+      <textarea style="resize:none" class="form-control" rows="4" name="note"><%= @import.note %></textarea>
+    </div>
+</div>
+<div class="row">
+  <div class="col-sm-12 table-responsive">
+    <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
+      <thead>
+      <tr>
+        <th width="20%">Sản Phẩm</th>
+        <th width="15%">Đơn Giá</th>        
+        <th width="7%">Số Lượng</th>
+        <th width="9%">Đơn Vị Tính</th>
+        <th width="17%">Tổng Tiền</th>
+        <th width="27%">Ghi Chú</th>
+        <th width="5%"></th>
+      </tr>
+      </thead>
+      <tbody>
+        <% if(!@warehouse_import_items.empty?) %>
+          <%- @warehouse_import_items.each_with_index do |item, i| %>
+            <tr id="item_<%= i %>" class="import-item">
+              <td>
+                <div class="form-group margin-b-0">
+                  <select class="form-control search-select item-product" name="item[<%= i %>][product_id]">
+                    <option value="">&nbsp;</option>
+                    <% @products.each do | product | %>
+                      <option data-unit_id=<%= product.unit_id%> value="<%= product.product_id %>"
+                      <% if(product.product_id == item.product_id) %> selected='selected' <% end %>>
+                        <%= product.product_name %>
+                      </option>
+                    <% end %>
+                  </select>
+                </div>
+              </td>
+              <td>
+                <div class="form-group margin-b-0">
+                  <input type="text" value="<%= item.price %>" class="form-control text-right item-price" name="item[<%= i %>][price]" />
+                </div>
+              </td>
+              <td>
+                <div class="form-group margin-b-0">
+                  <input type="text" value="<%= item.quantity %>" class="form-control text-right item-quantity" name="item[<%= i %>][quantity]" />
+                </div>
+              </td>
+              <td class="center"><strong class="item-unit"></strong></td>
+              <td class="item-total-grand text-right"><%= item.total_grand %></td>
+              <td>
+                <div class="form-group margin-b-0">
+                  <input type="text" value="<%= item.note %>" class="form-control item-note" name="item[<%= i %>][note]" />
+                </div>
+              </td>
+              <td class="center">
+                <a class="btn btn-bricky btn-xs delete-item" href="javascript:void(0);">
+                  <i class="glyphicon glyphicon-remove-circle"></i>
+                </a>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>  
+          <tr class="import-item">
+            <td>
+              <div class="form-group margin-b-0">
+                <select class="form-control search-select item-product" name="item[0][product_id]" >
+                  <option value="">&nbsp;</option>
+                  <% @products.each do | product | %>
+                    <option data-unit_id=<%= product.unit_id%> value="<%= product.product_id %>">
+                      <%= product.product_name %>
+                    </option>
+                  <% end %>
+                </select>
+              </div>
+            </td>
+            <td>
+              <div class="form-group margin-b-0">
+                <input type="text" value="0" class="form-control text-right item-price" name="item[0][price]" />
+              </div>
+            </td>
+            <td>            
+              <div class="form-group margin-b-0">
+                <input type="text" value="0" class="form-control text-right item-quantity" name="item[0][quantity]" />
+              </div>
+            </td>
+            <td class="center"><strong class="item-unit"></strong></td>
+            <td class="text-right"><strong class="item-total-grand">0</strong></td>
+            <td>
+              <div class="form-group margin-b-0">
+                <input type="text" name="item[0][note]" value="" class="form-control item-note" /></td>
+              </div>
+            <td class="center">
+              <a class="btn btn-bricky btn-xs delete-item" href="javascript:void(0);">
+                <i class="glyphicon glyphicon-remove-circle"></i>
+              </a>
+            </td>
+          </tr>
+        <% end %>
+        <tr id="example" class="hide">
+          <td>
+            <div class="form-group margin-b-0">
+              <select class="form-control item-product">
+                <option data-unit_id="" value="">&nbsp;</option>
+                <% @products.each do | product | %>
+                  <option data-unit_id=<%= product.unit_id%> value="<%= product.product_id %>">
+                    <%= product.product_name %>
+                  </option>
+                <% end %>
+              </select>
+            </div>
+          </td>
+          <td>
+            <div class="form-group margin-b-0">
+              <input type="text" value="0" class="form-control text-right item-price" />
+            </div>
+          </td>
+          <td>            
+            <div class="form-group margin-b-0">
+              <input type="text" value="0" class="form-control text-right item-quantity"  />
+            </div>
+          </td>
+          <td class="center"><strong class="item-unit"></strong></td>
+          <td class="text-right"><strong class="item-total-grand">0</strong></td>
+          <td>
+            <div class="form-group margin-b-0">
+              <input type="text" value="" class="form-control item-note" />
+            </div>
+          </td>
+          <td class="center">
+            <a class="btn btn-bricky btn-xs delete-item" href="javascript:void(0);">
+              <i class="glyphicon glyphicon-remove-circle"></i>
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="10">
+            <a class="btn btn-default btn-squared" id="btnAddItem" href="javascript:void(0);">
+              <i class="icon-plus"></i>
+              Thêm  
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>        
+<div class="row">
+  <p class="col-sm-12">
+    <%= submit_tag("Lưu", :class => 'btn btn-default', :id => 'btnSubmit') %>
+  </p>
+</div>
+
+<script type="text/javascript">
+
+  var units = jQuery.parseJSON('<%= @units_json.as_json.html_safe %>');
+  //var units = jQuery.parseJSON(unitsss)
+  $('.date-picker').datepicker({
+      autoclose: true
+  });
+
+  $(document).on('change','.item-product', function(e){
+
+    $(this).parents('tr').find('.item-unit').text('');
+    var unit_id = $(this).find("option:selected").attr('data-unit_id');
+    if(units[unit_id]){
+      $(this).parents('tr').find('.item-unit').text(units[unit_id]);
+    }    
+  });
+
+  $('#btnAddItem').click(function(e){
+    e.preventDefault();
+
+    var num  = $('.import-item').length;
+    var item = $('#example').clone();
+
+    item.removeAttr('id');
+    item.removeClass('hide');    
+    item.addClass('import-item');
+    item.find('.item-product').addClass('search-select');
+    item.find('.delete-item').removeClass('hide');    
+    item.find('.search-select').select2({
+        placeholder: "",
+        allowClear: true
+    });
+
+    item = replace_name_attr(item, num);    
+    $('#example').before(item);
+  });
+
+  $(document).on('click','.delete-item', function(e){
+    if($('.import-item').length > 1){
+      $(this).parents('tr').remove();
+
+      $('.import-item').each(function(i){
+        replace_name_attr($(this), i);
+      });
+    }    
+  });
+
+  $(document).on('keyup','.item-price, .item-quantity', function(e){
+    var price       = $(this).parents('tr').find('.item-price').val();
+    var quantity    = $(this).parents('tr').find('.item-quantity').val();
+    var total_grand = $(this).parents('tr').find('.item-total-grand');
+    total_grand.text(price*quantity);
+  });
+
+  $('#btnSubmit').click(function(e){
+    e.preventDefault();
+    if(is_valid()){      
+      $('form').submit();
+    }
+    return;
+  });
+
+  function is_valid(){
+    $('.error').remove();
+    $('.has-error').removeClass('has-error');
+    var valid = true;
+    if(!$('#date').val()){
+      valid = false;
+      $('#date').parents('.form-group').addClass('has-error');
+      $('#date').after('<span for="date" class="help-block error">Vui lòng chọn</span>');
+    }
+    if(!$('#title').val()){
+      valid = false;
+      $('#title').parents('.form-group').addClass('has-error');
+      $('#title').after('<span for="title" class="help-block error">Vui lòng nhập</span>');
+    }
+    if(!$('#supplier_id').val()){
+      valid = false;
+      $('#supplier_id').parents('.form-group').addClass('has-error');
+      $('#supplier_id').after('<span for="supplier_id" class="help-block error">Vui lòng chọn</span>');
+    }
+
+    $('.import-item').each(function(){
+      if(!$(this).find('select.item-product').val()){
+        valid = false;
+        $(this).find('.item-product').parents('.form-group').addClass('has-error');
+      }
+      if(!$(this).find('.item-price').val()){
+        console.log('2');
+        valid = false;
+        $(this).find('.item-price').parents('.form-group').addClass('has-error');
+      }
+      if(!$(this).find('.item-quantity').val()){
+        console.log('3');
+        valid = false;
+        $(this).find('.item-quantity').parents('.form-group').addClass('has-error');
+      }
+    });
+
+    return valid;
+  }
+
+  function replace_name_attr(item, num){
+    item.find('.item-product').attr('name', 'item['+ num +'][product_id]');
+    item.find('.item-price').attr('name', 'item['+ num +'][price]');
+    item.find('.item-quantity').attr('name', 'item['+ num +'][quantity]');
+    item.find('.item-note').attr('name', 'item['+ num +'][note]');
+    return item;
+  }
+</script>

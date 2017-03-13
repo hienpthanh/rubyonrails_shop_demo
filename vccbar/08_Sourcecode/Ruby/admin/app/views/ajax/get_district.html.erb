@@ -1,0 +1,6 @@
+<option value="" ></option>
+<% @districts.each do | district | %>
+  <option value="<%= district.district_id %>" class="province_<%= district.province_id %>">
+    <%= district.name %>
+  </option>
+<% end %>

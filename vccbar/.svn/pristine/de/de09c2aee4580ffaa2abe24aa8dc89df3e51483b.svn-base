@@ -1,0 +1,24 @@
+class Order < ActiveRecord::Base
+  self.table_name   = 'd_order'
+  self.primary_key  = 'order_id'
+  # validates :category_name, presence: true
+  has_many :orderitem
+  def self.get_all
+    select_sql      = "o.order_id, o.customer_name, o.customer_email, o.customer_phone, o.coupon_code, o.total_price, o.discount, o.total_grand, o.status, o.created_date, o.modified_date, u2.first_name as modified_first_name, u2.last_name as modified_last_name"
+    join_user2_sql  = "INNER JOIN d_user u2 ON u2.user_id = o.modified_by"
+    list = self.select(select_sql).from("d_order AS o").joins(join_user2_sql).order("o.order_id DESC")
+    return list
+  end
+
+  def self.change_status(object)
+    if object.status
+      object.status = 0
+    else
+      object.status = 1
+    end
+    object.modified_date  = Time.now
+    object.modified_by    = 1
+    return object.save
+  end
+
+end

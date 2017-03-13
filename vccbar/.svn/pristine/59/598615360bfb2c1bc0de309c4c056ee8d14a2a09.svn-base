@@ -1,0 +1,27 @@
+<!-- start: PAGE CONTENT -->
+<div class="row">
+  <div class="col-md-12">
+    <!-- start: DYNAMIC TABLE PANEL -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <i class="icon-external-link-sign"></i>
+        Thông Tin Đơn Hàng
+        <div class="panel-tools">
+          <a class="btn btn-xs btn-link panel-collapse collapses" href="#">
+          </a>
+          <a class="btn btn-xs btn-link panel-expand" href="#">
+            <i class="icon-resize-full"></i>
+          </a>
+        </div>
+      </div>
+      <div class="panel-body">
+        <%= error_messages_for() %>
+        <%= form_tag("/orders/#{@order['order_id']}", method: "post", id: "order") do %>
+            <% render "form" %>
+        <% end %>
+      </div>
+    </div>
+    <!-- end: DYNAMIC TABLE PANEL -->
+  </div>
+</div>
+<!-- end: PAGE CONTENT-->

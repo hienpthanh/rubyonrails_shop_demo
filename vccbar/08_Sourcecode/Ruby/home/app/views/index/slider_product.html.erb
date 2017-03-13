@@ -1,0 +1,77 @@
+
+        <!-- ================================== SLIDER PRODUCTS : START =============================== -->
+        <div class="sidebar-widget outer-bottom-small wow fadeInUp animated" >
+          <h3 class="section-title">Sản Phẩm Khuyên Dùng</h3>
+          <div class="sidebar-widget-body outer-top-xs">
+            <div class="owl-carousel sidebar-carousel special-offer custom-carousel owl-theme outer-top-xs" >
+              <div class="item">
+                <div class="products special-product">
+                  <% products = @slider_product %>
+                  <% products.each_with_index  do |product, i| %>
+                    <% #if((i + 1) % 6 != 0)%>
+                      <div class="product">
+                        <div class="product-micro">
+                          <div class="row product-micro-row">
+                            <div class="col col-xs-5">
+                              <div class="product-image">
+                                <div class="image">
+                                  <a href="/product/<%= to_alias(product.product_name)%>.<%= product.product_id %>.html" title="<%= product.product_name%>" data-lightbox="<%= product.product_name%>" data-title="<%= product.product_name%>">
+                                    <img data-echo="<%= product.product_image %>" src="/assets/images/blank.gif" alt="">
+                                    <div class="zoom-overlay"></div>
+                                  </a>          
+                                </div><!-- /.image -->
+                                <% 
+                                  type = ''
+                                  if(product.price != product.price_special)
+                                    type = 'sale'
+                                  elsif (product.is_hot == 1)
+                                    type = 'hot'
+                                  end 
+                                %>
+                                <% if(type) %>
+                                  <div class="tag tag-micro <%= type %>">
+                                    <span><%= type %></span>
+                                  </div>
+                                <% end %>     
+                              </div><!-- /.product-image -->
+                            </div><!-- /.col -->
+                            <div class="col col-xs-7">
+                              <div class="product-info">
+                                <h3 class="name">
+                                  <a href="/product/<%= to_alias(product.product_name)%>.<%= product.product_id %>.html" title="<%= product.product_name%>">
+                                    <%= product.product_name%>                                  
+                                  </a>
+                                </h3>
+                                <div class="product-price">          
+                                  <% if(type == "sale") %>
+                                    <span class="price">
+                                      <%= product.price_special %> VNĐ       
+                                    </span>            
+                                    <span class="price-before-discount"><s><%= product.price %></s> VNĐ</span>
+                                  <% else %>
+                                    <span class="price">
+                                      <%= product.price %> VNĐ       
+                                    </span>              
+                                  <% end %>          
+                                </div><!-- /.product-price --> 
+                                <div class="action"><a href="#" class="lnk btn btn-primary">Add To Cart</a></div>
+                              </div>
+                            </div><!-- /.col -->
+                          </div><!-- /.product-micro-row -->
+                        </div><!-- /.product-micro -->
+                      </div>
+                    <% #else %>
+                    <!--
+                        </div>
+                      </div>
+                      <div class="item">
+                        <div class="products special-product">
+                        -->
+                    <% #end %>
+                  <% end %>
+                </div>
+              </div> 
+            </div>
+          </div><!-- /.sidebar-widget-body -->
+        </div>
+        <!-- ================================== SLIDER PRODUCTS : END ================================= -->

@@ -1,24 +1,23 @@
 <% 
   product = data[:product]
+
+  type = ''
+  if(product.price != product.price_special)
+    type = 'sale'
+  elsif (product.is_hot == 1)
+    type = 'hot'
+  end 
 %>
-<div class="col-sm-6 col-md-4 wow fadeInUp animated" style="visibility: visible; animation-name: fadeInUp;">
+<div class="col-sm-6 col-md-4 wow fadeInUp animated category-product-grid-item" style="visibility: visible; animation-name: fadeInUp;">
   <div class="products">  
     <div class="product">   
       <div class="product-image">
         <div class="image">
           <a href="/product/<%= to_alias(product.product_name)%>.<%= product.product_id %>.html"><img src="<%= product.product_image %>" alt="<%= product.product_name%>"></a>
         </div><!-- /.image --> 
-        <% 
-          tag = ''
-          if(product.price != product.price_special)
-            tag = 'sale'
-          elsif (product.is_hot == 1)
-            tag = 'hot'
-          end 
-        %>
-        <% if(tag) %>
-          <div class="tag <%= tag %>">
-            <span><%= tag %></span>
+        <% if(type) %>
+          <div class="tag <%= type %>">
+            <span><%= type %></span>
           </div>
         <% end %>          
       </div><!-- /.product-image -->
@@ -26,7 +25,7 @@
         <h3 class="name"><a href="/product/<%= to_alias(product.product_name)%>.<%= product.product_id %>.html" title="<%= product.product_name%>"><%= product.product_name%></a></h3>
         <div class="description"></div>
         <div class="product-price">          
-          <% if(tag == "sale") %>
+          <% if(type == "sale") %>
             <span class="price">
               <%= product.price_special %> VNĐ       
             </span>            

@@ -1,0 +1,71 @@
+class Category < ActiveRecord::Base
+  self.table_name   = 'd_category'
+  self.primary_key  = 'category_id'
+  validates :category_name, presence: true
+  has_many :product
+ def self.get_all
+    sql = <<-SQL 
+        SELECT 
+          c.category_id, 
+          c.category_name,
+          c.parent_id, 
+          c.created_date, 
+          c.modified_date, 
+          c1.category_name as parent_name, 
+          u1.first_name as created_first_name, 
+          u1.last_name as created_last_name, 
+          u2.first_name as modified_first_name, 
+          u2.last_name as modified_last_name
+        FROM
+          d_category AS c
+        LEFT JOIN d_category c1 ON c.parent_id = c1.category_id AND c1.del_flg = 0
+        INNER JOIN d_user u1 ON u1.user_id = c.created_by
+        INNER JOIN d_user u2 ON u2.user_id = c.modified_by
+        WHERE c.del_flg = 0
+        ORDER BY c.category_id ASC
+    SQL
+    return self.find_by_sql(sql) 
+  end
+
+ def self.get_categories
+    sql = <<-SQL 
+        SELECT 
+          c.category_id, 
+          c.category_name, 
+          c.parent_id
+        FROM
+          d_category AS c
+        LEFT JOIN d_category c1 ON c.parent_id = c1.category_id AND c1.del_flg = 0
+        WHERE c.del_flg = 0
+        ORDER BY c.category_id ASC
+    SQL
+    return self.find_by_sql(sql) 
+  end
+
+  def self.add(data)
+    category = self.new
+    category.category_name  = data[:category_name]
+    category.parent_id      = data[:parent_id]
+    category.created_date   = Time.now
+    category.modified_date  = Time.now
+    category.created_by     = 1
+    category.modified_by    = 1
+    return category.save
+  end
+
+  def self.update(data, object)
+    data_update                  = {}
+    data_update[:category_name]  = data[:category_name]
+    data_update[:parent_id]      = data[:parent_id]
+    data_update[:modified_date]  = Time.now
+    data_update[:modified_by]    = 1
+    return object.update_attributes(data_update)
+  end
+
+  def self.delete(object)
+    object.del_flg        = 1
+    object.modified_date  = Time.now
+    object.modified_by    = 1
+    return object.save
+  end
+end

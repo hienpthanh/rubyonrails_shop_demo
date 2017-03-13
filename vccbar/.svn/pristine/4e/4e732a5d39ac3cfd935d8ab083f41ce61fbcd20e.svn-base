@@ -1,0 +1,65 @@
+class Product < ActiveRecord::Base
+  self.table_name = 'd_product'
+  self.primary_key = 'product_id'
+  # mount_uploader :product_image, ProductImageUploader
+  belongs_to :category
+  belongs_to :unit
+  def self.add(data)
+    # abort data.inspect
+    product = self.new
+    product.category_id = data[:category_id]
+    product.product_name  = data[:product_name]
+    product.product_code = data[:product_code]
+    product.product_description = data[:product_description]
+    product.product_image = 1
+    product.price = data[:price]
+    product.price_special = data[:price_special]
+    product.in_stock = data[:in_stock]
+    product.is_active = data[:is_active]
+    product.unit_id = data[:unit_id]
+    product.is_hot = data[:is_hot]
+    product.is_slider = data[:is_slider]
+    product.created_date   = Time.now
+    product.modified_date  = Time.now
+    product.created_by     = 1
+    product.modified_by    = 1
+    return product.save
+  end
+
+  def self.remove_data(object)
+    object.del_flg        = 1
+    object.modified_date  = Time.now
+    object.modified_by    = 1
+    return object.save
+  end
+
+  def self.active_data(object)
+    active_old = object.is_active
+    if  active_old
+      object.is_active = 0
+    else
+      object.is_active = 1
+    end
+    object.modified_date  = Time.now
+    object.modified_by    = 1
+    return object.save
+  end
+
+  def self.update_data(data, object)
+    object.category_id = data[:category_id]
+    object.product_name  = data[:product_name]
+    object.product_code = data[:product_code]
+    object.product_description = data[:product_description]
+    object.product_image = data[:product_image]
+    object.price = data[:price]
+    object.price_special = data[:price_special]
+    object.in_stock = data[:in_stock]
+    object.is_active = data[:is_active]
+    object.unit_id = data[:unit_id]
+    object.is_hot = data[:is_hot]
+    object.is_slider = data[:is_slider]
+    object.modified_date  = Time.now
+    object.modified_by    = 1
+    return object.save
+  end
+end

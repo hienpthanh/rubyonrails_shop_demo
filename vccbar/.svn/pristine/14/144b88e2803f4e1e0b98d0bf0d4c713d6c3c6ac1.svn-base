@@ -1,0 +1,56 @@
+<div class="navbar-content">
+  <!-- start: SIDEBAR -->
+  <div class="main-navigation navbar-collapse collapse">
+    <!-- start: MAIN MENU TOGGLER BUTTON -->
+    <div class="navigation-toggler">
+      <i class="clip-chevron-left"></i>
+      <i class="clip-chevron-right"></i>
+    </div>
+    <!-- end: MAIN MENU TOGGLER BUTTON -->
+    <!-- start: MAIN NAVIGATION MENU -->
+    <ul class="main-navigation-menu">
+      <li>
+        <a href="/index/index"><i class="clip-home-3"></i>
+          <span class="title"> Trang chủ </span><span class="selected"></span>
+        </a>
+      </li>
+      <li>
+        <a href="/category"><i class="clip-cog-2"></i>
+          <span class="title"> Quản lý danh mục</span>
+        </a>
+      </li>
+      <li>
+        <a href="/products"><i class="clip-cog-2"></i>
+          <span class="title"> Quản lý sản phẩm</span>
+        </a>
+      </li>
+      <li>
+        <a href="/unit"><i class="clip-cog-2"></i>
+          <span class="title"> Quản lý đơn vị tính</span>
+        </a>
+      </li>
+      <li>
+        <a href="/supplier"><i class="clip-cog-2"></i>
+          <span class="title"> Quản lý nhà cung cấp</span>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:void(0)"><i class="clip-cog-2"></i>
+          <span class="title"> Quản lý nhập sản phẩm</span>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:void(0)"><i class="clip-cog-2"></i>
+          <span class="title"> Quản lý doanh thu</span>
+        </a>
+      </li>
+      <li>
+        <a href="/orders"><i class="clip-cog-2"></i>
+          <span class="title"> Quản lý đơn hàng</span>
+        </a>
+      </li>
+    </ul>
+    <!-- end: MAIN NAVIGATION MENU -->
+  </div>
+  <!-- end: SIDEBAR -->
+</div>

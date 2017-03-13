@@ -1,0 +1,98 @@
+class WarehouseController < ApplicationController
+	CONTROLLER_TITLE = "Quản Lý Kho"
+  
+  #Show list 
+  def index
+
+  	@params = params
+  	@page   = 1
+
+  	if(!params[:page].nil?)
+  		@page = Integer(params[:page])
+  	end
+
+    @warehouse_imports = WarehouseImport.get_all(@params, @page = 1)
+    @page_title = 'Danh Sách Phiếu Nhập Kho'
+
+    @breadcrumbs    = []
+    @breadcrumbs[0] = {title: CONTROLLER_TITLE, active:1}
+  end
+
+  def inventory
+  	
+  end
+
+  #Show form which importing
+  def new
+    @page_title     = 'Thêm Phiếu Nhập Kho'
+    @breadcrumbs    = []
+    @breadcrumbs[0] = {title: CONTROLLER_TITLE, url: '/warehouse'}
+    @breadcrumbs[1] = {title: @page_title, active:1}
+
+    @import         = WarehouseImport.new
+    @suppliers      = Supplier.get_suppliers
+    @products       = Product.get_products
+    @units          = Unit.get_units
+    @warehouse_import_items = []
+  end
+
+  #Import
+  def create
+    if WarehouseImport.add(params)
+      flash[:notice] = 'Thành Công!'
+      redirect_to :action => 'index'
+    else
+      flash[:error]  = 'Thất Bại!'
+      redirect_to :action => 'index'
+    end
+  end
+
+  #Show form which editing
+  def edit
+    @id               = params[:id]
+    begin
+      @import         = WarehouseImport.find(@id)
+    rescue Exception => e
+      flash[:error]  = 'ID Không tồn tại'
+      redirect_to :action => 'index'
+    end     
+
+    @suppliers      = Supplier.get_suppliers
+    @products       = Product.get_products
+    @units          = Unit.get_units
+
+    begin
+      @warehouse_import_items = WarehouseImportItem.get_all_by_import_id(@id)
+    rescue Exception => e
+      @warehouse_import_items = []
+    end    
+
+    @page_title     = 'Cập Nhật Danh Mục'
+    @breadcrumbs    = []
+    @breadcrumbs[0] = {title: CONTROLLER_TITLE, url: '/warehouse'}
+    @breadcrumbs[1] = {title: @page_title, active:1}
+  end
+
+  #Update order
+  def update
+    @import = WarehouseImport.find(params[:id])
+    if WarehouseImport.update(@import, params)
+      flash[:notice] = 'Thành Công!'
+      redirect_to :action => 'index'
+    else
+      flash[:error] = 'Thất Bại!'
+      redirect_to :action => 'index'
+    end
+  end
+
+  #Delete a order
+  def delete
+    @WarehouseImport = WarehouseImport.find(params[:id])
+    if WarehouseImport.delete(@WarehouseImport)
+      flash[:notice] = 'Thành Công!'
+    else
+      flash[:error] = 'Thất Bại!'
+    end
+    redirect_to :action => 'index'
+  end
+end

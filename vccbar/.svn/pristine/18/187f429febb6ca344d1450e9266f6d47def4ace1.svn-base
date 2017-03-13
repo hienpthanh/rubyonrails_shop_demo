@@ -1,0 +1,57 @@
+<!-- start: PAGE CONTENT -->
+<p class="text-right">
+<%= link_to(new_supplier_path, :class=>"btn btn-light-grey") do %>
+  Thêm
+  <i class="icon-plus"></i>
+<% end %>
+</p>
+<!-- <p><%= link_to "New Supplier", new_supplier_path, class: "btn btn-light-grey" %></p> -->
+<div class="row">
+  <div class="col-md-12">
+    <!-- start: DYNAMIC TABLE PANEL -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <i class="icon-external-link-sign"></i>
+        Danh Sách Danh Mục
+      </div>
+      <div class="panel-body">
+        <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>Tên Nhà Cung Cấp</th>
+            <th>Người Tạo</th>
+            <th>Ngày Tạo</th>
+            <th> Người Cập Nhật</th>
+            <th>Ngày Cập Nhật</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <%- @supplier.each do |supplier| %>
+            <tr>
+              <td><%= supplier.	supplier_id	 %></td>
+              <td><%= supplier.	supplier_name	 %></td>
+              <td><%= supplier.created_by %></td>
+              <td><%= supplier.created_date.strftime("%Y/%m/%d") %></td>
+              <td><%= supplier.modified_by %></td>
+              <td><%= supplier.modified_date.strftime("%Y/%m/%d") %></td>
+              <td>
+                <a class="btn btn-primary btn-xs" href="/supplier/<%= supplier.supplier_id %>">
+                  <i class="icon-edit"></i>
+                </a>
+                <a data-confirm="Are you sure?" data-method="delete" class="btn btn-bricky btn-xs" href="/supplier/<%= supplier.supplier_id %>">
+                  <i class="glyphicon glyphicon-remove-circle"></i>
+                </a>
+              </td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+          <p><%= will_paginate @orders %></p>
+      </div>
+    </div>
+    <!-- end: DYNAMIC TABLE PANEL -->
+  </div>
+</div>
+<!-- end: PAGE CONTENT-->

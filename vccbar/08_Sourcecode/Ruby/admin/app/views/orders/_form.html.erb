@@ -1,0 +1,423 @@
+
+<div class="row">
+  <div class="col-sm-6">
+    <div class="row">
+        <div class="col-sm-3 form-group">
+          <%= label_tag(:customer_last_name, "Họ:", class: "") %>
+          <span class="symbol required"></span>
+          <br>
+          <%= text_field_tag(:customer_last_name, @order[:customer_last_name] , :class => 'form-control') %>
+        </div>
+        <div class="col-sm-5 form-group">
+          <%= label_tag(:customer_first_name, "Tên:", class: "") %>
+          <span class="symbol required"></span><br>
+          <%= text_field_tag(:customer_first_name, @order[:customer_first_name] , :class => 'form-control') %>
+        </div>
+        <div class="col-sm-4 form-group">
+          <%= label_tag(:customer_phone, "Số Điện Thoại:", class: "") %>
+          <span class="symbol required"></span><br>
+          <%= text_field_tag(:customer_phone, @order[:customer_phone] , :class => 'form-control') %>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 form-group">
+          <%= label_tag(:customer_address, "Địa Chỉ Giao Hàng:", class: "") %>
+          <span class="symbol required"></span>
+          <br>
+          <%= text_field_tag(:customer_address, @order[:customer_address] , :class => 'form-control') %>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4 form-group">
+          <%= label_tag(:customer_address_province, "Tỉnh/Thành Phố:", class: "") %>
+          <span class="symbol required"></span><br>
+          <select class="form-control search-select" id="address_province" name="customer_address_province">
+            <option value="">&nbsp;</option>
+            <% @provinces.each do | province | %>
+              <option <% if(!@order.order_id.nil? && province.province_id == @order.province_id) %> selected='selected' <% end %>
+                value="<%= province.province_id %>" ">
+                <%= province.name %>
+              </option>
+            <% end %>
+          </select>
+        </div>
+        <div class="col-sm-4 form-group">
+          <%= label_tag(:customer_address_district, "Quận/Huyện:", class: "") %>
+          <span class="symbol required"></span><br>
+          <select class="form-control search-select" id="address_district" name="customer_address_district">
+            <% @districts.each do | district | %>
+              <option <% if(district.district_id == @order.district_id) %> selected='selected' <% end %>
+                value="<%= district.district_id %>" class="province_<%= district.province_id %>">
+                <%= district.name %>
+              </option>
+            <% end %>
+          </select>
+        </div>
+        <div class="col-sm-4 form-group">
+          <%= label_tag(:customer_address_ward, "Phường/Xã:", class: "") %>
+          <span class="symbol required"></span><br>
+          <select class="form-control search-select" id="address_ward" name="customer_address_ward">
+            <% @wards.each do | ward | %>
+              <option <% if(ward.ward_id == @order.ward_id) %> selected='selected' <% end %>
+                value="<%= ward.ward_id %>" class="district_<%= ward.district_id %>">
+                <%= ward.name %>
+              </option>
+            <% end %>
+          </select>
+        </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="row">
+        <div class="col-sm-6 form-group">
+          <%= label_tag(:customer_email, "Email:", class: "") %>
+          <br>
+          <%= text_field_tag(:customer_email, @order[:customer_email] , :class => 'form-control') %>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 form-group">
+          <%= label_tag(:title, "Ghi Chú:", class: "") %>
+          <br>
+          <textarea style="resize:none" class="form-control" rows="4" name="note"><%= @order.note %></textarea>
+        </div>
+    </div>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-sm-12 table-responsive">
+    <table class="table table-striped table-bordered table-hover table-full-width" id="sample_1">
+      <thead>
+      <tr>
+        <th width="30%">Sản Phẩm</th>
+        <th width="20%">Đơn Giá</th>        
+        <th width="10%">Số Lượng</th>
+        <th width="15%">Đơn Vị Tính</th>
+        <th width="20%">Tổng Tiền</th>
+        <th width="5%"></th>
+      </tr>
+      </thead>
+      <tbody>
+        <% total_grand = 0 %>
+        <% if(!@items.empty?) %>
+          <%- @items.each_with_index do |item, i| %>
+            <% total_grand += item.price*item.quantity %>
+            <tr id="item_<%= i %>" class="import-item">
+              <td>
+                <div class="form-group margin-b-0">
+                  <select class="form-control search-select item-product" name="item[<%= i %>][product_id]">
+                    <option value="">&nbsp;</option>
+                    <% @products.each do | product | %>
+                      <% price = (product.price_special != product.price && product.price_special > 0) ? product.price_special : product.price %>
+                      <option data-unit_id="<%= product.unit_id%>" data-price="<%= price %>"  value="<%= product.product_id %>"
+                      <% if(product.product_id == item.product_id) %> selected='selected' <% end %>>
+                        <%= product.product_name %>
+                      </option>
+                    <% end %>
+                  </select>
+                </div>
+              </td>
+              <td>
+                <div class="form-group margin-b-0 text-right">
+                  <strong class="item-price"><%= item.price %></strong>
+                  <input type="hidden" value="<%= item.price %>" class="item-price-hidden" name="item[<%= i %>][price]" />
+                </div>
+              </td>
+              <td>
+                <div class="form-group margin-b-0">
+                  <input type="number" value="<%= item.quantity %>" class="form-control text-right item-quantity" name="item[<%= i %>][quantity]" />
+                </div>
+              </td>
+              <td class="center"><strong class="item-unit"><%= item.unit_name %></strong></td>
+              <td class="text-right">
+                <strong class="item-total-grand"><%= item.total_grand %></strong>
+              </td>
+              <td class="center">
+                <a class="btn btn-bricky btn-xs delete-item" href="javascript:void(0);">
+                  <i class="glyphicon glyphicon-remove-circle"></i>
+                </a>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>  
+          <tr class="import-item">
+            <td>
+              <div class="form-group margin-b-0">
+                <select class="form-control search-select item-product" name="item[0][product_id]" >
+                  <option value="">&nbsp;</option>
+                    <% @products.each do | product | %>
+                      <% price = (product.price_special != product.price && product.price_special > 0) ? product.price_special : product.price %>
+                      <option data-unit_id="<%= product.unit_id%>" data-price="<%= price %>" value="<%= product.product_id %>">
+                        <%= product.product_name %>
+                      </option>
+                    <% end %>
+                </select>
+              </div>
+            </td>
+            <td>
+              <div class="form-group margin-b-0 text-right">
+                <strong class="item-price">0</strong>
+                <input type="hidden" value="0" class="item-price-hidden" name="item[0][price]" />
+              </div>
+            </td>
+            <td>            
+              <div class="form-group margin-b-0">
+                <input type="number" value="0" class="form-control text-right item-quantity" name="item[0][quantity]" />
+              </div>
+            </td>
+            <td class="center"><strong class="item-unit"></strong></td>
+            <td class="text-right"><strong class="item-total-grand">0</strong></td>
+            <td class="center">
+              <a class="btn btn-bricky btn-xs delete-item" href="javascript:void(0);">
+                <i class="glyphicon glyphicon-remove-circle"></i>
+              </a>
+            </td>
+          </tr>
+        <% end %>
+        <tr id="example" class="hide">
+          <td>
+            <div class="form-group margin-b-0">
+              <select class="form-control item-product">
+                <option data-unit_id="" value="">&nbsp;</option>
+                  <% @products.each do | product | %>
+                    <% price = (product.price_special != product.price && product.price_special > 0) ? product.price_special : product.price %>
+                    <option data-unit_id="<%= product.unit_id%>" data-price="<%= price %>" value="<%= product.product_id %>">
+                      <%= product.product_name %>
+                    </option>
+                  <% end %>
+              </select>
+            </div>
+          </td>
+          <td>
+            <div class="form-group margin-b-0 text-right">
+              <strong class="item-price">0</strong>
+              <input type="hidden" value="0" class="item-price-hidden" />              
+            </div>
+          </td>
+          <td>            
+            <div class="form-group margin-b-0">
+              <input type="number" value="0" class="form-control text-right item-quantity"  />
+            </div>
+          </td>
+          <td class="center"><strong class="item-unit"></strong></td>
+          <td class="text-right"><strong class="item-total-grand">0</strong></td>
+          <td class="center">
+            <a class="btn btn-bricky btn-xs delete-item" href="javascript:void(0);">
+              <i class="glyphicon glyphicon-remove-circle"></i>
+            </a>
+          </td>
+        </tr>
+        <tr id="summary">
+          <td colspan="4" class="text-right">
+            <strong>Tổng Cộng</strong>
+          </td>
+          <td class="text-right"><strong id="summary-item-total-grand"><%= total_grand %></strong></td>
+          <td class="text-right">VNĐ</td>
+        </tr>
+        <tr>
+          <td colspan="10">
+            <a class="btn btn-default btn-squared" id="btnAddItem" href="javascript:void(0);">
+              <i class="icon-plus"></i>
+              Thêm 
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>        
+<div class="row">
+  <p class="col-sm-12 text-center">
+    <%= submit_tag("Đặt Hàng", :class => 'btn btn-default', :id => 'btnSubmit') %>
+  </p>
+</div>
+
+<script type="text/javascript">
+
+  var units = jQuery.parseJSON('<%= @units_json.as_json.html_safe %>');
+  //var units = jQuery.parseJSON(unitsss)
+  $('.date-picker').datepicker({
+      autoclose: true
+  });
+
+  $(document).on('change','#address_province', function(e){
+    get_district();    
+  });
+
+  $(document).on('change','#address_district', function(e){
+    get_ward();    
+  });  
+
+  $(document).on('change','.item-product', function(e){
+
+    $(this).parents('tr').find('.item-unit').text('');
+    var unit_id     = $(this).find("option:selected").attr('data-unit_id');
+    var price       = $(this).find("option:selected").attr('data-price');
+    
+    var item_quantity    = $(this).parents('tr').find('.item-quantity').val();
+    var item_total_grand = $(this).parents('tr').find('.item-total-grand');
+    var item_price       = $(this).parents('tr').find('.item-price-hidden');
+
+    if(units[unit_id]){
+      $(this).parents('tr').find('.item-unit').text(units[unit_id]);
+    }
+
+    $(this).parents('tr').find('.item-price').text(price); 
+    item_price.val(price); 
+    item_total_grand.text(price*item_quantity);
+
+    sum_total();
+  });
+
+  $('#btnAddItem').click(function(e){
+    e.preventDefault();
+
+    var num  = $('.import-item').length;
+    var item = $('#example').clone();
+
+    item.removeAttr('id');
+    item.removeClass('hide');    
+    item.addClass('import-item');
+    item.find('.item-product').addClass('search-select');
+    item.find('.delete-item').removeClass('hide');    
+    item.find('.search-select').select2({
+        placeholder: "",
+        allowClear: true
+    });
+
+    item = replace_name_attr(item, num);    
+    $('#example').before(item);
+  });
+
+  $(document).on('click','.delete-item', function(e){
+    if($('.import-item').length > 1){
+      $(this).parents('tr').remove();
+
+      $('.import-item').each(function(i){
+        replace_name_attr($(this), i);
+      });
+
+      sum_total();
+    }    
+  });
+
+  $(document).on('keyup','.item-quantity', function(e){
+    var price       = parseInt($(this).parents('tr').find('.item-price').text());
+    var quantity    = $(this).parents('tr').find('.item-quantity').val();
+    var total_grand = $(this).parents('tr').find('.item-total-grand');
+    total_grand.text(price*quantity);
+
+    sum_total();    
+  });
+
+  $('#btnSubmit').click(function(e){
+    e.preventDefault();
+    if(is_valid()){      
+      $('form').submit();
+    }
+    return;
+  });
+
+  function is_valid(){
+    $('.error').remove();
+    $('.has-error').removeClass('has-error');
+    
+    var valid = true;
+    if(!$('#customer_last_name').val()){
+      valid = false;
+      $('#customer_last_name').parents('.form-group').addClass('has-error');
+      $('#customer_last_name').after('<span for="date" class="help-block error">Vui lòng nhập</span>');
+    }
+
+    if(!$('#customer_first_name').val()){
+      valid = false;
+      $('#customer_first_name').parents('.form-group').addClass('has-error');
+      $('#customer_first_name').after('<span for="date" class="help-block error">Vui lòng nhập</span>');
+    }
+
+    if(!$('#customer_phone').val()){
+      valid = false;
+      $('#customer_phone').parents('.form-group').addClass('has-error');
+      $('#customer_phone').after('<span for="date" class="help-block error">Vui lòng nhập</span>');
+    }
+
+    if(!$('#customer_address').val()){
+      valid = false;
+      $('#customer_address').parents('.form-group').addClass('has-error');
+      $('#customer_address').after('<span for="date" class="help-block error">Vui lòng nhập</span>');
+    }
+
+    if(!$('#address_province').val()){
+      valid = false;
+      $('#address_province').parents('.form-group').addClass('has-error');
+      $('#address_province').after('<span for="date" class="help-block error">Vui lòng chọn</span>');
+    }
+
+    if(!$('#address_district').val()){
+      valid = false;
+      $('#address_district').parents('.form-group').addClass('has-error');
+      $('#address_district').after('<span for="date" class="help-block error">Vui lòng chọn</span>');
+    }
+
+    if(!$('#address_ward').val()){
+      valid = false;
+      $('#address_ward').parents('.form-group').addClass('has-error');
+      $('#address_ward').after('<span for="date" class="help-block error">Vui lòng chọn</span>');
+    }
+
+    $('.import-item').each(function(){
+      if(!$(this).find('select.item-product').val()){
+        valid = false;
+        $(this).find('.item-product').parents('.form-group').addClass('has-error');
+      }
+      if(!$(this).find('.item-quantity').val() || parseInt($(this).find('.item-quantity').val()) == 0){
+        valid = false;
+        $(this).find('.item-quantity').parents('.form-group').addClass('has-error');
+      }
+    });
+
+    return valid;
+  }
+
+  function replace_name_attr(item, num){
+    item.find('.item-product').attr('name', 'item['+ num +'][product_id]');
+    item.find('.item-price-hidden').attr('name', 'item['+ num +'][price]');
+    item.find('.item-quantity').attr('name', 'item['+ num +'][quantity]');
+    item.find('.item-note').attr('name', 'item['+ num +'][note]');
+    return item;
+  }
+
+  function sum_total(){
+    var sum_total = 0;
+    $('.import-item').each(function(){
+      sum_total += parseInt($(this).find('.item-total-grand').text().trim());
+    });    
+    $('#summary-item-total-grand').text(sum_total);
+  }
+
+  function get_district(){
+    var province_id = $('#address_province').val();
+
+    $.ajax({
+      url: '/ajax/get_district/' + province_id,
+      success: function(html){
+        $('#address_district').html(html);
+      }
+    });
+    return false;
+  }
+
+  function get_ward(){
+
+    var ward_id = $('#address_district').val();
+
+    $.ajax({
+      url: '/ajax/get_ward/' + ward_id,
+      success: function(html){
+        $('#address_ward').html(html);
+      }
+    });
+    return false;
+  }
+</script>

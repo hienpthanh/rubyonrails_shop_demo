@@ -1,0 +1,10 @@
+ALTER TABLE `d_order`
+DROP COLUMN `customer_name`,
+DROP COLUMN `customer_email`,
+DROP COLUMN `customer_phone`;
+
+ALTER TABLE `d_order_address`
+DROP COLUMN `del_flg`;
+
+
+
